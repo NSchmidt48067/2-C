@@ -5,6 +5,7 @@
  */
 public class BoundedList<T> implements List<T> {
   private T[] elements;
+  private int capacity;
   // TODO you might want another private field...
 
   /** Create a new BoundedList with the given maximum capacity.
@@ -13,6 +14,10 @@ public class BoundedList<T> implements List<T> {
     @SuppressWarnings("unchecked")
     T[] elements = (T[]) new Object[capacity];
     this.elements = elements;
+    this.capacity = capacity;
+
+    //Establish loop to take in commands
+    while ()
   }
 
   @Override
