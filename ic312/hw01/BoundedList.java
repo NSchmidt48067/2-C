@@ -3,6 +3,8 @@
  * When an instance of this class is constructed, the chosen capacity
  * represents the maximum size the list can ever grow to.
  */
+import java.util.*;
+
 public class BoundedList<T> implements List<T> {
   private T[] elements;
   private int capacity;
@@ -17,7 +19,28 @@ public class BoundedList<T> implements List<T> {
     this.capacity = capacity;
 
     //Establish loop to take in commands
-    while ()
+    Scanner in = new Scanner(System.in);
+    String cmd = in.nextString();
+    int place = null;
+
+    while (cmd != "quit"){
+      if (cmd == "get"){
+        place = 
+        System.out.println(elements.get());
+      }
+      else if (cmd == "set"){
+
+      }
+      else if (cmd == "add"){
+
+      }
+      else if (cmd == "remove"){
+
+      }
+      else if (cmd == "size"){
+
+      }
+    }
   }
 
   @Override
