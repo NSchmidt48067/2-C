@@ -11,10 +11,5 @@ with open("words.txt", "r") as file:
 
 sort = sorted(dictionary.items(), key=lambda x:x[1], reverse = True)
 
-sort_dict = dict(sort)
-i = 0
-for key, val in sort_dict.items():
+for key, val in sort[:5]:
     print(f"{key}: {val}")
-    i += 1
-    if i == 5:
-        break
