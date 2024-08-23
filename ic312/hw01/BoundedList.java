@@ -4,10 +4,11 @@
  * represents the maximum size the list can ever grow to.
  */
 import java.util.*;
+import java.lang.*;
 
 public class BoundedList<T> implements List<T> {
   private T[] elements;
-  private int capacity;
+  private List<Integer> lst;
   // TODO you might want another private field...
 
   /** Create a new BoundedList with the given maximum capacity.
@@ -16,28 +17,28 @@ public class BoundedList<T> implements List<T> {
     @SuppressWarnings("unchecked")
     T[] elements = (T[]) new Object[capacity];
     this.elements = elements;
-    this.capacity = capacity;
+    lst = new BoundedList<Integer>(capacity);
 
     //Establish loop to take in commands
     Scanner in = new Scanner(System.in);
-    String cmd = in.nextString();
-    int place = null;
+    String line = in.nextLine();
+    String[] cmd = line.split(" ", 5);
+    int place;
 
-    while (cmd != "quit"){
-      if (cmd == "get"){
-        place = 
-        System.out.println(elements.get());
+    while (cmd[0] != "quit"){
+      if (cmd[0] == "get"){
+        
       }
-      else if (cmd == "set"){
-
-      }
-      else if (cmd == "add"){
+      else if (cmd[0] == "set"){
 
       }
-      else if (cmd == "remove"){
+      else if (cmd[0] == "add"){
 
       }
-      else if (cmd == "size"){
+      else if (cmd[0] == "remove"){
+
+      }
+      else if (cmd[0] == "size"){
 
       }
     }
