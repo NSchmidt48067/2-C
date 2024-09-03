@@ -1,9 +1,32 @@
 // Nathaniel Schmidt
 
 import java.util.NoSuchElementException;
+import java.util.*;
 
 public class LinkedList<T> implements List<T> {
   // TODO your private inner classes and fields...
+
+  private class Node {
+    T data;
+    Node next;
+
+    public Node(int data, Node next) {
+      this.data = data;
+      this.next = next;
+    }
+  }
+
+  Node head = null;
+
+  //Moves throughout the list
+  public void traverse(Node cur){
+    if (cur.next == null)
+      return;
+
+    //Do something with cur
+
+    traverse(cur.next);
+  }
 
   @Override
   public T get(int index) throws IndexOutOfBoundsException {
@@ -17,6 +40,8 @@ public class LinkedList<T> implements List<T> {
 
   @Override
   public void add(int index, T data) throws IndexOutOfBoundsException {
+
+
     throw new UnsupportedOperationException(); // TODO erase this and get it working
   }
 
