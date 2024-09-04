@@ -10,13 +10,15 @@ public class LinkedList<T> implements List<T> {
     T data;
     Node next;
 
-    public Node(int data, Node next) {
+    public Node(T data, Node next) {
       this.data = data;
       this.next = next;
     }
   }
 
-  Node head = null;
+  private Node head = null;
+  private Node tail = null;
+  private int size = 0;
 
   //Moves throughout the list
   public void traverse(Node cur){
@@ -30,7 +32,22 @@ public class LinkedList<T> implements List<T> {
 
   @Override
   public T get(int index) throws IndexOutOfBoundsException {
-    throw new UnsupportedOperationException(); // TODO erase this and get it working
+    if (index < 0 || index >= size) {
+      throw new IndexOutOfBoundsException("outside of current list size");
+    }
+    else {
+      return get(head, index).data;
+    }
+  }
+
+  private Node get(Node cur, int index) {
+    if (index == 0) {
+      return cur;
+    }
+    else {
+      cur = get(cur.next, index - 1);
+      return cur;
+    }
   }
 
   @Override
@@ -40,10 +57,36 @@ public class LinkedList<T> implements List<T> {
 
   @Override
   public void add(int index, T data) throws IndexOutOfBoundsException {
+    if (index < 0) {
+      throw new IndexOutOfBoundsException("negative index");
+    }
+    else if (index > size) {
+      throw new IndexOutOfBoundsException("adding more than +1 the current size");
+    }
+    else {
+      head = add(head, index, data);
+      size++;
+    }
 
-
-    throw new UnsupportedOperationException(); // TODO erase this and get it working
   }
+  //Helper method so user doesn't know the imlpementation
+  private Node add(Node cur, int index, T data) {
+
+    if (cur == null) {//If list is empty
+        tail =  new Node(data, null);
+      }
+    else if (index > 1){//Move through the list until you get to the right node
+        add(cur.next, index - 1, data);
+      }
+    else {//Create the node
+    //Possibly add if statement to handle
+    //case where adding to the end and thus need a null in next position
+        return new Node(data, cur.next);
+      }
+      return cur;
+        
+  }
+  
 
   @Override
   public void remove(int index) throws IndexOutOfBoundsException {
@@ -70,5 +113,10 @@ public class LinkedList<T> implements List<T> {
    */
   public T penultimate() throws NoSuchElementException {
     throw new UnsupportedOperationException(); // TODO erase this and get it working
+  }
+
+  public static void main(String args[]) {
+    //Main is not necessary. It is just for me to test my own code
+    add(0, 1);
   }
 }
