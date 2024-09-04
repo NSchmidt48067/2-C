@@ -116,5 +116,6 @@ public class BoundedList<T> implements List<T> {
     lst.add(1,9);
     lst.add(0,10);
     lst.set(0,69);
+    System.out.println(lst.toString());
   }
 }

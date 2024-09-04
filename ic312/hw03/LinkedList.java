@@ -17,18 +17,11 @@ public class LinkedList<T> implements List<T> {
   }
 
   private Node head = null;
+  private Node temp = null;
   private Node tail = null;
   private int size = 0;
 
-  //Moves throughout the list
-  public void traverse(Node cur){
-    if (cur.next == null)
-      return;
-
-    //Do something with cur
-
-    traverse(cur.next);
-  }
+  public LinkedList() {}
 
   @Override
   public T get(int index) throws IndexOutOfBoundsException {
@@ -41,18 +34,33 @@ public class LinkedList<T> implements List<T> {
   }
 
   private Node get(Node cur, int index) {
-    if (index == 0) {
-      return cur;
+    if (index == 0) {//It's recursed where the data is, return
+      
     }
-    else {
+    else {//Recurse with index - 1
       cur = get(cur.next, index - 1);
-      return cur;
     }
+    return cur;
   }
 
   @Override
   public void set(int index, T data) throws IndexOutOfBoundsException {
-    throw new UnsupportedOperationException(); // TODO erase this and get it working
+    if (index < 0 || index >= size) {
+    throw new IndexOutOfBoundsException("outside of current list size");
+    }
+    else {
+      //head = 
+      set(head, index, data);
+    }
+  }
+
+  private void set(Node cur, int index, T data) {
+    if (index == 0) {
+      cur.data = data;
+    }
+    else {
+      set(cur.next, index - 1, data);
+    }
   }
 
   @Override
@@ -71,26 +79,40 @@ public class LinkedList<T> implements List<T> {
   }
   //Helper method so user doesn't know the imlpementation
   private Node add(Node cur, int index, T data) {
-
-    if (cur == null) {//If list is empty
-        tail =  new Node(data, null);
-      }
-    else if (index > 1){//Move through the list until you get to the right node
-        add(cur.next, index - 1, data);
-      }
-    else {//Create the node
-    //Possibly add if statement to handle
-    //case where adding to the end and thus need a null in next position
-        return new Node(data, cur.next);
-      }
+    if (cur == null) {
+      // we've reached the end of the list, so make a new tail
+      tail = new Node(data, null);
+      return tail;
+    } else if (index == 0) {
+      // the new element comes before the current node, so insert it here.
+      // Note that this constructor sets the "next" of the new node to "cur".
+      return new Node(data, cur);
+    } else {
+      // otherwise the new element comes after cur, so use recursion!
+      cur.next = add(cur.next, index - 1, data);
       return cur;
-        
+    }
   }
   
 
   @Override
   public void remove(int index) throws IndexOutOfBoundsException {
-    throw new UnsupportedOperationException(); // TODO erase this and get it working
+    if (index < 0 || index >= size) {
+      throw new IndexOutOfBoundsException("outside of current list size");
+    }
+    else {
+      remove(head, index);
+      size--;
+    }
+  }
+  private void remove(Node cur, int index) {
+    temp = cur;
+    if (index == 0) {
+      cur = cur.next;
+    }
+    else {
+      remove(cur.next, index - 1);
+    }
   }
 
   @Override
@@ -115,8 +137,17 @@ public class LinkedList<T> implements List<T> {
     throw new UnsupportedOperationException(); // TODO erase this and get it working
   }
 
+
   public static void main(String args[]) {
     //Main is not necessary. It is just for me to test my own code
-    add(0, 1);
+    LinkedList<Integer> lst = new LinkedList<Integer>();
+    lst.add(0,1);
+    lst.add(0,2);
+    lst.add(0,3);
+    lst.set(2, 69);
+    lst.remove(1);
+    System.out.println(lst.head.data);
+    System.out.println(lst.head.next.data);
+    //System.out.println(lst.head.next.next.data);
   }
 }
