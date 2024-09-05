@@ -17,7 +17,6 @@ public class LinkedList<T> implements List<T> {
   }
 
   private Node head = null;
-  private Node temp = null;
   private Node tail = null;
   private int size = 0;
 
@@ -101,23 +100,25 @@ public class LinkedList<T> implements List<T> {
       throw new IndexOutOfBoundsException("outside of current list size");
     }
     else {
-      remove(head, index);
-      size--;
+      head = remove(head, index);
     }
   }
-  private void remove(Node cur, int index) {
-    temp = cur;
+  private Node remove(Node cur, int index) {
     if (index == 0) {
-      cur = cur.next;
+      Node temp = cur.next;
+      cur = null;
+      size--;
+      return temp;
     }
     else {
-      remove(cur.next, index - 1);
+      cur.next = remove(cur.next, index - 1);
+      return cur;
     }
   }
 
   @Override
   public int size() {
-    throw new UnsupportedOperationException(); // TODO erase this and get it working
+    return size;
   }
 
   /** Removes ALL elements matching the given one using .equals().
@@ -125,7 +126,20 @@ public class LinkedList<T> implements List<T> {
    * @param element The element that should be removed
    */
   public void removeAll(T element) {
-    throw new UnsupportedOperationException(); // TODO erase this and get it working
+    head = removeAll(head, element);
+  }
+  private Node removeAll(Node cur, T data) {
+    if (cur == null) {
+      return cur;
+    }
+    if (cur.data.equals(data)) {
+      size--;
+      return removeAll(cur.next, data);
+    }
+    else {
+      cur.next = removeAll(cur.next, data);
+      return cur;
+    }
   }
 
   /** Gets the 2nd-to-last element.
@@ -134,7 +148,27 @@ public class LinkedList<T> implements List<T> {
    * @throws NoSuchElementException if the list size is less than 2
    */
   public T penultimate() throws NoSuchElementException {
-    throw new UnsupportedOperationException(); // TODO erase this and get it working
+    if (size < 2) {
+      throw new NoSuchElementException("the list is 2 nodes or less");
+    }
+    else {
+      return penultimate(head).data;
+    }
+  }
+  private int count = 0;
+  private Node penultimate(Node cur) {
+    if (cur == null) {
+      return cur;
+    }
+    cur.next = penultimate(cur.next);
+    //System.out.println(count);
+    count++;
+    if (count == 2){
+      return cur;
+    }
+    else {
+      return cur;
+    }
   }
 
 
@@ -144,10 +178,11 @@ public class LinkedList<T> implements List<T> {
     lst.add(0,1);
     lst.add(0,2);
     lst.add(0,3);
-    lst.set(2, 69);
-    lst.remove(1);
-    System.out.println(lst.head.data);
-    System.out.println(lst.head.next.data);
-    //System.out.println(lst.head.next.next.data);
+    //lst.set(2, 2);
+    System.out.println(lst.penultimate());
+    //System.out.println(lst.head.data);
+    //System.out.println(lst.head.next.data);
+    
+    //System.out.println(lst.size());
   }
 }
