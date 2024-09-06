@@ -142,7 +142,7 @@ public class LinkedList<T> implements List<T> {
     }
   }
 
-  /** Gets the 2nd-to-last element.
+  /** gets the 2nd-to-last element.
    *
    * @return The data in the second-to-last node in the list (if any)
    * @throws NoSuchElementException if the list size is less than 2
