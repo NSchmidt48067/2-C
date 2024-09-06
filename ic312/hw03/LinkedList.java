@@ -152,23 +152,17 @@ public class LinkedList<T> implements List<T> {
       throw new NoSuchElementException("the list is 2 nodes or less");
     }
     else {
-      return penultimate(head).data;
+      return penultimate(head, 0).data;
     }
   }
-  private int count = 0;
-  private Node penultimate(Node cur) {
-    if (cur == null) {
-      return cur;
-    }
-    cur.next = penultimate(cur.next);
-    //System.out.println(count);
-    count++;
-    if (count == 2){
-      return cur;
+  private Node penultimate(Node cur, int num) {
+    if (size - num == 2) {
+
     }
     else {
-      return cur;
+      cur = penultimate(cur.next, num + 1);
     }
+    return cur;
   }
 
 
