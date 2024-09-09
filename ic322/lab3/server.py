@@ -13,17 +13,20 @@ print('The server is ready to receive')
 while True:
  connectionSocket, addr = serverSocket.accept()
  request = connectionSocket.recv(1024).decode()
- print(request)
 
+ stream = request.split(" ")
+ file = stream[1]
+ file = file[1:]
 
+ f1 = open(file, "rb")
+ content = f1.read()
+ f1.close()
 
- #connectionSocket.send(response.encode())
+ response = """
+ HTTP/1.1 200 OK
 
- def signal_handler(signal, frame):
-        # close the socket here
-        serverPort.close()
-        sys.exit(0)
- signal.signal(signal.SIGINT, signal_handler)
+""".encode() + content
+
+ connectionSocket.send(response)
+ connectionSocket.close()
  
- 
- #connectionSocket.send(capitalizedSentence.encode())
