@@ -26,7 +26,7 @@ public class MyText implements Text {
     /** Returns the character at the current cursor position. */
   public char get() throws IndexOutOfBoundsException {
     if (cursor == null) {
-      throw new IndexOutOfBoundsException("negative index");
+      throw new IndexOutOfBoundsException("There is no data to get");
     }
     else {
     return cursor.next.data;
@@ -52,7 +52,12 @@ public class MyText implements Text {
    * @throws NoSuchElementException if the cursor is at the end.
    */
   public void delete() throws NoSuchElementException {
-
+    if (cursor.next == null) {//At end of list and not 
+      throw new NoSuchElementException("There is no data to delete");
+    }
+    else {
+      cursor = cursor.next;
+    }
   }
 
   /** Returns whether there is another character to the left of the cursor. */
@@ -95,6 +100,14 @@ public class MyText implements Text {
    *      ^
    */
   public void print() {
-    
+    print(head, size);
+  }
+  public void print(Node cur, int num) {
+    if (num == 0) {
+      System.out.println(cur.data);
+    }
+    else {
+      print(cur.next, num--);
+    }
   }
 }
