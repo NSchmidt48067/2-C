@@ -24,24 +24,27 @@ public class MyText implements Text {
 
 
     /** Returns the character at the current cursor position. */
-  public char get() throws NoSuchElementException {
-
-
-    return 'x';
+  public char get() throws IndexOutOfBoundsException {
+    if (cursor == null) {
+      throw new IndexOutOfBoundsException("negative index");
+    }
+    else {
+    return cursor.next.data;
+    }
   }
 
   /** Inserts a new character before the current cursor position. */
   public void insert(char c) {
-
+    insert(cursor, c);
   }
   //Helper method so user doesn't know the imlpementation
-  private Node add(Node cur, char data) {
+  private Node insert(Node cur, char data) {
     if (size == 0) {
-      Node temp = new Node(c, null, head);
+      Node temp = new Node(data, null, head);
       head.next = temp;
       return temp;
     } else {
-      return new Node(c, cur.next, cur);
+      return new Node(data, cur.next, cur);
     }
   }
   /** Deletes the character at the current cursor position.
