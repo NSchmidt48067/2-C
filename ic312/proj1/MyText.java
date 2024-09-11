@@ -1,18 +1,41 @@
 import java.util.NoSuchElementException;
 
 
-//ARRAY IMPLEMENTATION
+
 
 
 public class MyText implements Text {
+    private char[] line = new char[10];
+    private int front = 0;
+    private int cursor = 0;
+    private int size = 0;
+
+
     /** Returns the character at the current cursor position. */
   public char get() throws NoSuchElementException {
 
+
+    return 'x';
   }
 
   /** Inserts a new character before the current cursor position. */
   public void insert(char c) {
+    //Make array bigger if all slots are full
+    if (size >= line.length) {
+        expand();
+    }
 
+    
+    }
+  
+
+  //Double the size of the array
+  public void expand() {
+    char[] temp = new char[line.length * 2];
+    for (int i = 0; i < line.length; i++) {
+        temp[i] = line[i];
+    }
+    line = temp;
   }
 
   /** Deletes the character at the current cursor position.
@@ -26,6 +49,7 @@ public class MyText implements Text {
   /** Returns whether there is another character to the left of the cursor. */
   public boolean canMoveLeft() {
 
+    return true;
   }
 
   /** Moves the cursor one character to the left.
@@ -38,6 +62,7 @@ public class MyText implements Text {
   /** Returns whether the cursor is NOT at the end. */
   public boolean canMoveRight() {
 
+    return true;
   }
 
   /** Moves the cursor one character to the right.
