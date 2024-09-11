@@ -1,14 +1,26 @@
 import java.util.NoSuchElementException;
 
 
-
+//Linked List
 
 
 public class MyText implements Text {
-    private char[] line = new char[10];
-    private int front = 0;
-    private int cursor = 0;
-    private int size = 0;
+  private class Node {
+    char data;
+    Node next;
+    Node prev;
+
+    public Node(char data, Node next, Node prev) {
+      this.data = data;
+      this.next = next;
+      this.prev = prev;
+    }
+  }
+
+  private Node cursor = null;
+  //Blank head Node to make insertion and deletion easier
+  private Node head = new Node('x', null, null);
+  private int size = 0;
 
 
     /** Returns the character at the current cursor position. */
@@ -20,24 +32,18 @@ public class MyText implements Text {
 
   /** Inserts a new character before the current cursor position. */
   public void insert(char c) {
-    //Make array bigger if all slots are full
-    if (size >= line.length) {
-        expand();
-    }
 
-    
-    }
-  
-
-  //Double the size of the array
-  public void expand() {
-    char[] temp = new char[line.length * 2];
-    for (int i = 0; i < line.length; i++) {
-        temp[i] = line[i];
-    }
-    line = temp;
   }
-
+  //Helper method so user doesn't know the imlpementation
+  private Node add(Node cur, char data) {
+    if (size == 0) {
+      Node temp = new Node(c, null, head);
+      head.next = temp;
+      return temp;
+    } else {
+      return new Node(c, cur.next, cur);
+    }
+  }
   /** Deletes the character at the current cursor position.
    * The cursor should move to the right of what was just deleted.
    * @throws NoSuchElementException if the cursor is at the end.
