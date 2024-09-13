@@ -43,3 +43,4 @@ payload = {
 response = requests.post(url, data=payload,headers=header)
 
 print(f'Status Code: {response.status_code}')
+print(response.text)
