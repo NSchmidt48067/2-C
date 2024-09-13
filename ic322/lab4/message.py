@@ -9,10 +9,10 @@ def createH():
     lines = data.strip().split("\n")#split by line
     d = {}
     for line in lines:
-        x = line.strip.split(":", 1)
+        x = line.strip().split(":", 1)
         if (x[0] == "Cookie:"):
-            cookies = x[1].strip.split(";")
-            a = cookies.strip.split("=")
+            cookies = x[1].strip().split(";")
+            a = cookies.strip().split("=")
             d.update(a)
         d[x[0].strip()] = x[1].strip()
     return d
