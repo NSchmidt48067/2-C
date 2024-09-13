@@ -13,6 +13,7 @@ def createH():
         if (x[0] == "Cookie:"):
             cookies = x[1].strip().split(";")
             a = cookies.strip().split("=")
+            print(a)
             d.update(a)
         d[x[0].strip()] = x[1].strip()
     return d
