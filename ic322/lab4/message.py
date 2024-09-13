@@ -10,7 +10,6 @@ def createH():
     for line in lines:
         x = line.split(":", 1)
         d[x[0].strip()] = x[1].strip()
-    print(d)
     return d
 
 #Creates the payload information in a dictionary
