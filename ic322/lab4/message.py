@@ -10,17 +10,11 @@ def createH():
     d = {}
     for line in lines:
         x = line.split(":", 1)
+        if (x[0] == "Cookie:"):
+            cookies = x[1].split(";")
+            a = cookies.split("=")
+            d.update(a)
         d[x[0].strip()] = x[1].strip()
-    return d
-
-#Creates the payload information in a dictionary
-def createP(x):
-    lines = x.strip().split("\n")#split by line
-    d = {}
-    for line in lines:
-        f = line.split(":", 1)
-        d[f[0].strip()] = f[1].strip()
-    print(d)
     return d
 
 
