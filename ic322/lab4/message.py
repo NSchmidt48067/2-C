@@ -30,7 +30,7 @@ url = "https://mids.usna.edu/ITSD/mids/drgwq010$.startup"
 header = createH()
 
 payload = {
-    'P_ALPHA':265646,
+    'P_ALPHA': '265646',
     'P_LAST_NAME': '',
     'P_MICO_CO_NBR':'', 
     'P_SECOF_COOF_SEBLDA_AC_YR':'2025',
