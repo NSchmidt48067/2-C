@@ -142,19 +142,15 @@ public class MyText implements Text {
     }
     System.out.println();
 
-    boolean carat = false;
-    for (Node temp = head; temp.next != null; temp = temp.next ) {
-      if (temp.num == cursor.num) {
+    for (Node temp = head; temp != null; temp = temp.next ) {
+      if (temp == cursor) {
         System.out.print("^");
-        carat = true;
         break;
       }
       else {
         System.out.print(" ");
       }
     }
-    if (!carat)
-      System.out.print("^");
     System.out.println();
   }
 }
