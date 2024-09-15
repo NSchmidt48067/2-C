@@ -147,6 +147,7 @@ public class MyText implements Text {
       if (temp.num == cursor.num) {
         System.out.print("^");
         carat = true;
+        break;
       }
       else {
         System.out.print(" ");
