@@ -29,7 +29,7 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
    */
   public void push(T item) {
     //Reached capacity
-    if (tail == capacity) {
+    if (tail == capacity - 1) {
       head = 1;
       tail = 0;
       elements[tail] = item;
@@ -83,12 +83,16 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
    * removed.
    */
   public void setCapacity(int capacity) {
+    @SuppressWarnings("unchecked")
     T[] temp = (T[]) new Object[capacity];
     int count = 0;
     for (int i = head; i < capacity; i = (i + 1) % capacity) {
         temp[count] = elements[i];
         count++;
     }
+    head = 0;
+    tail = capacity - 1;
+
     elements = temp;
   }
 
@@ -102,9 +106,12 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
    * The capacity should remain unchanged.
    */
   public void clear() {
-    elements = (T[]) new Object[capacity];
+    @SuppressWarnings("unchecked")
+    T[] temp = (T[]) new Object[capacity];
+    elements = temp;
     head = 0;
     tail = 0;
+    size = 0;
   }
 
 
