@@ -7,7 +7,6 @@ import java.lang.NullPointerException;
 public class MyText implements Text {
   private class Node {
     char data;
-    int num;
     Node next;
     Node prev;
 
@@ -15,8 +14,6 @@ public class MyText implements Text {
       this.data = data;
       this.next = next;
       this.prev = prev;
-      num = size;
-      size++;
     }
   }
 
@@ -24,7 +21,6 @@ public class MyText implements Text {
   //Blank head Node to make insertion and deletion easier
   private Node head = new Node('x', null, null);
   private Node cursor = head;
-  private int size = 0;
 
   //Constructor
   public MyText() {}
@@ -46,12 +42,12 @@ public class MyText implements Text {
   }
   //Helper method so user doesn't know the imlpementation
   private Node insert(Node cur, char data) {
-    if (size == 0) {
-      Node temp = new Node(data, null, head);
-      head.next = temp;
-      return temp;
-    }
-    else if (cur.next == null) {
+    // if (size == 0) {
+    //   Node temp = new Node(data, null, head);
+    //   head.next = temp;
+    //   return temp;
+    // }
+    if (cur.next == null) {
       //Create new node and move cursor to the next node
       cur.next = new Node(data, null, cur);
       return cur.next;
@@ -85,7 +81,6 @@ public class MyText implements Text {
         //If there are fewer than 3 nodes, just delete the next node
         cursor.next = null;
       }
-      size--;
     }
   }
 
