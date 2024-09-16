@@ -42,11 +42,6 @@ public class MyText implements Text {
   }
   //Helper method so user doesn't know the imlpementation
   private Node insert(Node cur, char data) {
-    // if (size == 0) {
-    //   Node temp = new Node(data, null, head);
-    //   head.next = temp;
-    //   return temp;
-    // }
     if (cur.next == null) {
       //Create new node and move cursor to the next node
       cur.next = new Node(data, null, cur);
