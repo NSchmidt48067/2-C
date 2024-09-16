@@ -57,9 +57,10 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
   /** Removes and returns the element at the top of the stack.
    * @throws NoSuchElementException if the stack is empty.
    */
+  @Override
   public T pop() throws NoSuchElementException {
     if (isEmpty()) {
-        throw NoSuchElementException("The Stack is empty");
+        throw new NoSuchElementException("The Stack is empty");
     }
     else {
       T item = elements[tail];
