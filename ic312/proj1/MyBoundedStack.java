@@ -121,7 +121,7 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
 
   public static void main(String args[]) {
     //Main is not necessary. It is just for me to test my own code
-    BoundedStack<Character> stack = new MyBoundedStack<Character>();
+    //BoundedStack<Character> stack = new MyBoundedStack<Character>();
 
   }
 }
