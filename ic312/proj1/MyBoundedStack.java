@@ -13,9 +13,9 @@ import java.util.*;
  */
 public class MyBoundedStack<T> implements BoundedStack<T> {
   @SuppressWarnings("unchecked")
-  private T[] elements = (T[]) new Object[10];
+  private T[] elements;
   private int size = 0;
-  private int capacity = 10;
+  private int capacity = 0;
   //head keeps track of where the start and end of the array is
   private int head = 0;
   private int tail = 0;
@@ -24,6 +24,7 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     @SuppressWarnings("unchecked")
     T[] elements = (T[]) new Object[capacity];
     this.elements = elements;
+    this.capacity = capacity;
   }
 
   /** Adds a new element to the top of the stack.
@@ -121,7 +122,7 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
 
   public static void main(String args[]) {
     //Main is not necessary. It is just for me to test my own code
-    //BoundedStack<Character> stack = new MyBoundedStack<Character>();
-
+    BoundedStack<Character> stack = new MyBoundedStack<Character>(5);
+    stack.push('a');
   }
 }
