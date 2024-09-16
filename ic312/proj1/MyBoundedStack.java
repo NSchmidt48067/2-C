@@ -18,7 +18,7 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
   private int capacity = 0;
   //head keeps track of where the start and end of the array is
   private int head = 0;
-  private int tail = 0;
+  private int tail = -1;
 
   public MyBoundedStack(int capacity) {
     @SuppressWarnings("unchecked")
@@ -33,6 +33,13 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
    * removed from the BOTTOM of the stack.
    */
   public void push(T item) {
+    //if (tail)
+
+
+
+
+
+
     //Reached capacity
     if (tail == capacity - 1) {
       head = 1;
@@ -55,6 +62,7 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     else {
         tail++;
         elements[tail] = item;
+            System.out.println(tail + " " + elements[tail]);
     }
     size++;
   }
@@ -120,9 +128,28 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
   }
 
 
+    public T get(int num) {
+        return elements[(num + head) % capacity];
+    }
+      @Override
+  // this produces a string like "[ 1 2 3 4 ]"
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+        System.out.println(size);
+    sb.append("[ ");
+    for (int i = 0; i < size; ++i) {
+        System.out.println(get(i));
+      sb.append(get(i).toString());
+      sb.append(' ');
+    }
+    sb.append(']');
+    return sb.toString();
+  }
+
   public static void main(String args[]) {
     //Main is not necessary. It is just for me to test my own code
     BoundedStack<Character> stack = new MyBoundedStack<Character>(5);
     stack.push('a');
+        System.out.println(stack.toString());
   }
 }
