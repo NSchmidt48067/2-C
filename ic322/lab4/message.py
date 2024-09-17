@@ -35,8 +35,6 @@ for key, value in cookies.items():
 
 cookiejar = {"Cookie" : line}
 
-#print(cookiejar)
-
 url = "https://mids.usna.edu/ITSD/mids/drgwq010$mids.actionquery"
 
 d = createH(cookiejar)
@@ -65,10 +63,6 @@ parsed = BeautifulSoup(response.content, "html.parser")
 file = open('file.html', 'w')
 file.write(str(parsed.prettify()))
 file.close()
-
-
-file = open('file.html', 'r')
-data = file.read()
 
 line = parsed.find_all("td")
 for index, stuff in enumerate(line):
