@@ -3,21 +3,43 @@ from bs4 import BeautifulSoup
 #!/usr/bin/env python3
 
 #Creaates the headers in a dictionary
-def createH():
+def createH(cookiejar):
     file = open("data.txt", "r")
     data = file.read()#Read in entire file
     lines = data.strip().split("\n")#split by line
     d = {}
     for line in lines:
         key, value = line.split(':', 1)
-        d[key.strip()] = value.strip()
+        if (key == "Cookie"):
+            d.update(cookiejar)
+        else:
+            d[key.strip()] = value.strip()
     return d
 
+usr = "m265646"
+pswrd = "MarryIsabelle12@$"
 
+url = "https://login.usna.edu/oam/server/obrareq.cgi?encquery%3DPXq8TVWSS0EtxtXCaw%2Bo2WNCh7r6uwn726eOcS%2Bdi6UFI7UGU0fMfHYk8%2FaetBWmD1aM3zH0bkj1lDaSTfhuPRhu7Bb6w4ihGONOe%2BL1YgGseh90pyErekmsxjEkOMCakqx3BfgHT8SX6gu3WJtIaMuk2ejMQrQCSFvQA%2BnrRs9B9pmyWiCihiQSMf1g%2FV7wRGwpjBZR52O6RCMTfVNrcOXEBhtQSFTqE2Fm4sw9mgZhYM3zTzde7a1YOdrJEBD3jVtXixiBU4bJK5z7WfC6yw%3D%3D%20agentid%3DUSNA_OHS12c_WebGateAgent%20ver%3D1%20crmethod%3D2"
+
+data = {'username' : usr, 'password' : pswrd}
+
+curSession = requests.Session()
+
+curSession.post(url, data = data)
+cookies = curSession.cookies.get_dict()
+
+line = ""
+
+for key, value in cookies.items():
+    line = line + key + "=" + value + "; "
+
+cookiejar = {"Cookie" : line}
+
+#print(cookiejar)
 
 url = "https://mids.usna.edu/ITSD/mids/drgwq010$mids.actionquery"
 
-d = createH()
+d = createH(cookiejar)
 
 header = d
 
