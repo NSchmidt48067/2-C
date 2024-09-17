@@ -83,13 +83,9 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     else {
       count = size - 1;
     }
-    System.out.println(size);
     int i = tail;
     do {
       i = (i - 1 + this.capacity) % this.capacity;
-      if (capacity == 1) {
-        System.out.println(count + " " + i);
-      }
       temp[count] = elements[i];
       count--;
       if (count == -1)
@@ -150,47 +146,47 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
   }
 
   public static void main(String args[]) {
-    BoundedStack<Integer> stk = new MyBoundedStack<>(3);
-    stk.push(10);
-    stk.push(20);
-        //System.out.println(stk.get(0));
-    stk.setCapacity(5);
-    stk.push(30);
-    stk.push(40);
-    // System.out.println(stk.get(0));
-    // System.out.println(stk.get(1));
-    // System.out.println(stk.get(2));
-    // System.out.println(stk.get(3));
+    // BoundedStack<Integer> stk = new MyBoundedStack<>(3);
+    // stk.push(10);
+    // stk.push(20);
+    //     //System.out.println(stk.get(0));
+    // stk.setCapacity(5);
+    // stk.push(30);
+    // stk.push(40);
+    // // System.out.println(stk.get(0));
+    // // System.out.println(stk.get(1));
+    // // System.out.println(stk.get(2));
+    // // System.out.println(stk.get(3));
 
-    //System.out.println(stk.toString());
+    // //System.out.println(stk.toString());
 
-    if (40 == (int)stk.pop()) {
-      System.out.println("success");
-    }
-        if (30 == (int)stk.pop()) {
-      System.out.println("success");
-    }
+    // if (40 == (int)stk.pop()) {
+    //   System.out.println("success");
+    // }
+    //     if (30 == (int)stk.pop()) {
+    //   System.out.println("success");
+    // }
     
-    System.out.println(stk.getAll());
+    // System.out.println(stk.getAll());
 
-        if (20 == (int)stk.pop()) {
-      System.out.println("success");
-    }
-        if (10 == (int)stk.pop()) {
-      System.out.println("success");
-    }
-    stk.push(100);
-    stk.push(200);
-    stk.push(300);
+    //     if (20 == (int)stk.pop()) {
+    //   System.out.println("success");
+    // }
+    //     if (10 == (int)stk.pop()) {
+    //   System.out.println("success");
+    // }
+    // stk.push(100);
+    // stk.push(200);
+    // stk.push(300);
     
-    stk.setCapacity(1);
-    if (!stk.isEmpty()) {
-      System.out.println("not empty");
+    // stk.setCapacity(1);
+    // if (!stk.isEmpty()) {
+    //   System.out.println("not empty");
+    // }
+    // if (300 == (int)stk.pop()) {
+    //   System.out.println("success");
+    // }    
+    // if (stk.isEmpty()) {
+    //   System.out.println("empty");
     }
-    if (300 == (int)stk.pop()) {
-      System.out.println("success");
-    }    
-    if (stk.isEmpty()) {
-      System.out.println("empty");
-    }}
 }
