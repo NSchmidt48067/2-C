@@ -18,6 +18,9 @@ public interface BoundedStack<T> {
    */
   void push(T item);
 
+  String getAll();
+  T get(int index);
+
   /** Removes and returns the element at the top of the stack.
    * @throws NoSuchElementException if the stack is empty.
    */
