@@ -56,5 +56,5 @@ data = file.read()
 line = parsed.find_all("td")
 for index, stuff in enumerate(line):
     print(stuff.text)
-    if (index == 50):
+    if (index == 50 ):
         break
