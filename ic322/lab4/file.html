@@ -1,7 +1,996 @@
-Mon, 16 Sep 2024 19:18:14 GMT
+<html>
+ <head>
+  <title>
+   Schedules - Query Midshipmen :
+  </title>
+  <meta content="Oracle Designer Web PL/SQL Generator" name="GENERATOR"/>
+  <script>
+   FormType = "Update";
+  </script>
+ </head>
+ <body bgcolor="FFFFFF" link="000080" onload="return MIDS_OnLoad()" vlink="000080">
+  <script>
+   <!-- Hide from old browsers
+var index = 0;
+var DataChangeErrors = false;
+var DataChange = false;
+var P_MIDS_ID = new Array();
+P_MIDS_ID[0] = "75726";
+var P_0 = new Array();
+P_0[0] = "75726";
+var P_18 = new Array();
+P_18[0] = "192325";
+var SCHE_CHK_VALUE = new Array();
+SCHE_CHK_VALUE [0]= 37455;
+function JSLNotNull(pctl, pmsg){
+   if (pctl.value == "") { alert(pmsg); pctl.focus(); return false; }
+   return true;
+}
+function JSLMakeUpper(pctl) {
+   pctl.value = pctl.value.toUpperCase();
+}
+function JSLReplace(pstr1, pstr2, pstr3) {
+   if (pstr1 != "") {
+     var rtnstr = "";
+     var searchstr = pstr1;
+     var addlen = pstr2.length;
+     var index = pstr1.indexOf(pstr2);
+     while ((index != -1) && (searchstr != "")) {
+       rtnstr = rtnstr + searchstr.substring(0, index);
+       if (pstr3 != null) {
+         rtnstr = rtnstr + pstr3;
+       }
+       searchstr = searchstr.substring(index + addlen, searchstr.length);
+       if (searchstr != "") {
+          index = searchstr.indexOf(pstr2);
+       }
+       else { index = -1; }
+     }
+     return (rtnstr + searchstr);
+   }
+   else {
+     return "";
+   }
+}
+function JSLGetValue(pctl, ptype, pfalse) {
+   var i = 0;
+   if (ptype == null) { return pctl.value; }
+   if (ptype == "CHECK") {
+      if (pctl.checked) { return pctl.value; }
+      else { return pfalse; }
+   }
+   if (ptype == "RADIO") {
+      for (i=0;i<pctl.length;i++) {
+         if (pctl[i].checked) { return pctl[i].value; }
+      }
+      return "";
+   }
+   if (ptype == "LIST") {
+      if (pctl.selectedIndex >= 0) {
+         if (pctl.options[pctl.selectedIndex].value != "") {
+            return pctl.options[pctl.selectedIndex].value;
+         }
+         else { return pctl.options[pctl.selectedIndex].text; }
+      }
+      else { return ""; }
+   }
+}
+function JSLStripMask(p_val) {
+  if (p_val == "") { return ""; }
+  var str = p_val;
+  str = JSLReplace(str, " ");
+  str = JSLReplace(str, ",");
+  str = JSLReplace(str, "$");
+  str = JSLReplace(str, "USD");
 
-Failed to parse target procedure 
-drgwq010$.startup: SIGNATURE (parameter names) MISMATCH
-VARIABLES IN FORM NOT IN PROCEDURE: P_ALPHA,P_LAST_NAME,P_MICO_CO_NBR,P_SECOF_COOF_SEBLDA_AC_YR,P_SECOF_COOF_SEBLDA_SEM,P_SECOF_COOF_SEBLDA_BLK_NBR,P_MAJOR_CODE,P_NOMI_FORMATTED_NAME,Z_ACTION,Z_CHK
-NON-DEFAULT VARIABLES IN PROCEDURE NOT IN FORM: 
+  if ((str.substring(0, 1) == "<") && (str.substring(str.length -1, str.length) == ">")) {
+      str = "-" + str.substring(1, str.length - 1);
+  }
+  if (str.substring(str.length -1, str.length) == "-") {
+    str = "-" + str.substring(0, str.length - 1);
+  }
+  if (str.substring(str.length -1, str.length) == "+") {
+    str = str.substring(0, str.length - 1);
+  }
+  return str;
+}
+function JSLToNumber(p_val) {
+   var lval = JSLStripMask(p_val);
+   if (lval == "") { return ""; }
+   else { return parseFloat(lval); }
+}
+function JSLChkNumScale (pctl, pval, pscale, pmsg) {
+  if (pval != "") {
+    var PointPos = pval.indexOf(".");
+    if (PointPos != -1) {
+      var Scale = pval.length - PointPos - 1;
+      if (Scale > pscale) {
+        alert(pmsg);
+        pctl.focus();
+        return false;
+      }
+    }
+  }
+  return true;
+}
+function JSLChkNumPrecision(pctl, pval, pprecision, pmsg) {
+  if (pval != "") {
+    var Prec = 0;
+    var PointPos = pval.indexOf(".");
+    // If a decimal point was not found
+    // validate the number of digits in the whole string
+    if (PointPos == -1) {
+      Prec = pval.length;
+    }
+    else {  // Validate the number of digits before the decimal point
+      Prec = PointPos;
+    }
+    if (pval.indexOf("-") == 0) {
+       Prec = Prec - 1;
+    };
+    if (pval.indexOf("+") == 0) {
+       Prec = Prec - 1;
+    };
 
+    if (Prec > pprecision) { alert(pmsg); pctl.focus(); return false; }
+  }
+   return true;
+}
+function JSLCheckModified( p_form, p_action, p_submit ) {
+   var l_mod = false;
+   for (i = 0; i < p_form.z_modified.length; i++)
+   {
+      if (p_form.z_modified[i].value == "Y") {
+         l_mod = true;
+         break;
+      };
+   };
+   if (l_mod) {
+      alert("Data on this page has been modified. Please submit changes or revert before continuing.");
+      return false;
+   } else {
+      p_form.Z_ACTION.value = p_action;
+      if (p_submit) {
+          p_form.submit();
+          return true;
+      }
+   }
+
+
+}
+function JSLRevertForm( p_form, rows ) {
+   for (i = 0; i < p_form.z_modified.length; i++)
+   {
+      if (p_form.z_modified[i].value == "Y") {
+         p_form.z_modified[i].value = "N";
+      }
+   }
+   ResetRadios( p_form, rows );
+   return true;
+}
+function MIDS_OnLoad(ctl, index) {
+
+   if ( FormType != "PostDelete")
+   {
+      form_num=0;
+      do
+      {
+         elem_num=0;
+         len = document.forms[form_num].elements.length;
+         if (len > 0)
+         {
+            while (elem_num < len &&
+                   document.forms[form_num].elements[elem_num].type != "text" &&
+                   document.forms[form_num].elements[elem_num].type != "textarea")
+            {
+               elem_num++;
+            }
+            if (elem_num < len)
+            {
+               document.forms[form_num].elements[elem_num].focus();
+               break;
+            }
+         }
+         form_num++;
+      } while ( form_num < document.forms.length );
+   }
+
+   return true;
+}
+function btnVFU_OnClick(ctl, index) {
+   ctl.form.submit();
+   return true;
+}
+function btnVFD_OnClick(ctl, index) {
+   if (!confirm("Please confirm the Delete")) { return false }
+   ctl.form.Z_ACTION.value = "VerifiedDelete";
+   ctl.form.submit();
+   return true;
+}
+function btnVFR_OnClick(ctl, index) {
+   ctl.form.submit();
+   return true;
+}
+//-->
+  </script>
+  <font color="000080">
+   <h2 align="LEFT">
+   </h2>
+  </font>
+  <p>
+   <font color="000080">
+    <h3>
+     <table>
+      <tr>
+       <td align="_center">
+        <font size="4">
+         <b>
+          <font color="#000080">
+           Nathaniel Morgan Schmidt/265646/36
+          </font>
+         </b>
+        </font>
+       </td>
+       <td colspan="20">
+        <font face="Arial" size="2">
+        </font>
+       </td>
+       <td>
+        <font face="Arial" size="2">
+         <a href="https://usna.blackboard.com/bbcswebdav/orgs/DEPTCSERV/Midn Photos/2026/M265646.jpg" target="_blank">
+          <img border="0" height="75" naturalsizeflag="0" src="https://usna.blackboard.com/bbcswebdav/orgs/DEPTCSERV/Midn Photos/2026/M265646.jpg" width="50"/>
+         </a>
+        </font>
+       </td>
+      </tr>
+     </table>
+     <br/>
+     Ac Yr Ending: 2025    Semester: FALL    Blk Nbr: 1
+    </h3>
+   </font>
+   <form action="ActionItem" method="post" name="VF$AIFormTop">
+   </form>
+   <p>
+    <table>
+     <input name="P_MIDS_ID" type="hidden" value="75726"/>
+     <input name="P_SECOF_ID" type="hidden" value="192325"/>
+     <input name="O_MIDS_ID" type="hidden" value="75726"/>
+     <input name="O_SECOF_ID" type="hidden" value="192325"/>
+     <input name="H_MAJOR" type="hidden" value="COMPUTER SCIENCE"/>
+     <tr valign="TOP">
+      <td align="LEFT">
+       <font face="Arial" size="2">
+        <b>
+         Major:
+        </b>
+       </font>
+      </td>
+      <td align="LEFT">
+       <font face="Arial" size="2">
+        COMPUTER SCIENCE
+       </font>
+      </td>
+     </tr>
+     <input name="H_NOMI_FORMATTED_NAME" type="hidden" value="Mark Woodcock"/>
+     <tr valign="TOP">
+      <td align="LEFT">
+       <font face="Arial" size="2">
+        <b>
+         Adviser:
+        </b>
+       </font>
+      </td>
+      <td align="LEFT">
+       <font face="Arial" size="2">
+        Mark Woodcock
+       </font>
+      </td>
+     </tr>
+     <input name="H_SCHEDULE_STATUS" type="hidden" value=""/>
+     <tr valign="TOP">
+      <td align="LEFT">
+       <font face="Arial" size="2">
+        <b>
+         Schedule Status:
+        </b>
+       </font>
+      </td>
+      <td align="LEFT">
+       <font face="Arial" size="2">
+       </font>
+      </td>
+     </tr>
+     <script>
+      <!-- Hide from old browsers
+document.write('<INPUT TYPE="hidden" NAME="z_modified" VALUE="N">');
+//-->
+     </script>
+    </table>
+    <p>
+     <input name="Z_ACTION" type="hidden" value=""/>
+     <script>
+      <!-- Hide from old browsers
+var FormType = "List";
+var P_MIDS_ID2 = new Array();
+P_MIDS_ID2[0] = "75726";
+var P_0 = new Array();
+P_0[0] = "75726";
+var P_18 = new Array();
+P_18[0] = "192325";
+var SCHE_CHK_VALUE = new Array();
+SCHE_CHK_VALUE[0] = 37455;
+var P_22 = new Array();
+var P_23 = new Array();
+//-->
+     </script>
+     <font color="000080">
+      <h2 align="LEFT">
+       Schedule
+      </h2>
+     </font>
+     <p>
+      <p>
+       <table border="">
+        <tr class="cgrlheaderrow">
+         <th align="LEFT" id="TITLE">
+          <font face="Arial" size="2">
+           Title
+          </font>
+         </th>
+         <th align="LEFT" id="COURSE_NBR">
+          <font face="Arial" size="2">
+           Course
+          </font>
+         </th>
+         <th align="LEFT" id="SECT">
+          <font face="Arial" size="2">
+           Section
+          </font>
+         </th>
+         <th align="LEFT" id="SETI_MTG_TIME">
+          <font face="Arial" size="2">
+           Meeting Time
+          </font>
+         </th>
+         <th align="LEFT" id="BLD_ROOM">
+          <font face="Arial" size="2">
+           Bld Room
+          </font>
+         </th>
+         <th align="LEFT">
+          <font face="Arial" size="2">
+           Primary Instructor
+          </font>
+         </th>
+        </tr>
+        <tr class="cgrldatarow" valign="TOP">
+         <td align="LEFT" id="TITLE1">
+          <font face="Arial" size="2">
+           <a href="drgwq010$sche.QueryViewByKey?P_SECOF_ID2=190380&amp;P_MIDS_ID2=75726&amp;P_0=75726&amp;P_18=192325&amp;Z_CHK=51333" target="_top">
+            INTRODUCTORY ECONOMICS
+           </a>
+          </font>
+         </td>
+         <td align="LEFT" id="COURSE_NBR1">
+          <font face="Arial" size="2">
+           FE210
+          </font>
+         </td>
+         <td align="LEFT" id="SECT1">
+          <font face="Arial" size="2">
+           5001
+          </font>
+         </td>
+         <td align="LEFT" id="SETI_MTG_TIME1">
+          <font face="Arial" size="2">
+           MWF5
+          </font>
+         </td>
+         <td align="LEFT" id="BLD_ROOM1">
+          <font face="Arial" size="2">
+           MI202
+          </font>
+         </td>
+         <td align="LEFT" id="1">
+          <font face="Arial" size="2">
+           LARSON
+          </font>
+         </td>
+        </tr>
+        <tr class="cgrldatarow" valign="TOP">
+         <td align="LEFT" id="TITLE2">
+          <font face="Arial" size="2">
+           <a href="drgwq010$sche.QueryViewByKey?P_SECOF_ID2=192060&amp;P_MIDS_ID2=75726&amp;P_0=75726&amp;P_18=192325&amp;Z_CHK=50562" target="_top">
+            DATA STRUCTURES
+           </a>
+          </font>
+         </td>
+         <td align="LEFT" id="COURSE_NBR2">
+          <font face="Arial" size="2">
+           IC312
+          </font>
+         </td>
+         <td align="LEFT" id="SECT2">
+          <font face="Arial" size="2">
+           3001
+          </font>
+         </td>
+         <td align="LEFT" id="SETI_MTG_TIME2">
+          <font face="Arial" size="2">
+           MWF3
+          </font>
+         </td>
+         <td align="LEFT" id="BLD_ROOM2">
+          <font face="Arial" size="2">
+           HP123
+          </font>
+         </td>
+         <td align="LEFT" id="2">
+          <font face="Arial" size="2">
+           GENTILE
+          </font>
+         </td>
+        </tr>
+        <tr class="cgrldatarow" valign="TOP">
+         <td align="LEFT" id="TITLE3">
+          <font face="Arial" size="2">
+           <a href="drgwq010$sche.QueryViewByKey?P_SECOF_ID2=192068&amp;P_MIDS_ID2=75726&amp;P_0=75726&amp;P_18=192325&amp;Z_CHK=52618" target="_top">
+            COMPUTER NETWORKS
+           </a>
+          </font>
+         </td>
+         <td align="LEFT" id="COURSE_NBR3">
+          <font face="Arial" size="2">
+           IC322
+          </font>
+         </td>
+         <td align="LEFT" id="SECT3">
+          <font face="Arial" size="2">
+           6541
+          </font>
+         </td>
+         <td align="LEFT" id="SETI_MTG_TIME3">
+          <font face="Arial" size="2">
+           MW6,R56
+          </font>
+         </td>
+         <td align="LEFT" id="BLD_ROOM3">
+          <font face="Arial" size="2">
+           HP125,HP316
+          </font>
+         </td>
+         <td align="LEFT" id="3">
+          <font face="Arial" size="2">
+           MAROON
+          </font>
+         </td>
+        </tr>
+        <tr class="cgrldatarow" valign="TOP">
+         <td align="LEFT" id="TITLE4">
+          <font face="Arial" size="2">
+           <a href="drgwq010$sche.QueryViewByKey?P_SECOF_ID2=192040&amp;P_MIDS_ID2=75726&amp;P_0=75726&amp;P_18=192325&amp;Z_CHK=50048" target="_top">
+            ORGANIZATIONAL BEHAVIOR
+           </a>
+          </font>
+         </td>
+         <td align="LEFT" id="COURSE_NBR4">
+          <font face="Arial" size="2">
+           NL310
+          </font>
+         </td>
+         <td align="LEFT" id="SECT4">
+          <font face="Arial" size="2">
+           1003
+          </font>
+         </td>
+         <td align="LEFT" id="SETI_MTG_TIME4">
+          <font face="Arial" size="2">
+           MWF1
+          </font>
+         </td>
+         <td align="LEFT" id="BLD_ROOM4">
+          <font face="Arial" size="2">
+           LU107
+          </font>
+         </td>
+         <td align="LEFT" id="4">
+          <font face="Arial" size="2">
+           TOUW
+          </font>
+         </td>
+        </tr>
+        <tr class="cgrldatarow" valign="TOP">
+         <td align="LEFT" id="TITLE5">
+          <font face="Arial" size="2">
+           <a href="drgwq010$sche.QueryViewByKey?P_SECOF_ID2=192325&amp;P_MIDS_ID2=75726&amp;P_0=75726&amp;P_18=192325&amp;Z_CHK=51590" target="_top">
+            LAW OF ARMED CONFLICT
+           </a>
+          </font>
+         </td>
+         <td align="LEFT" id="COURSE_NBR5">
+          <font face="Arial" size="2">
+           NL410
+          </font>
+         </td>
+         <td align="LEFT" id="SECT5">
+          <font face="Arial" size="2">
+           1201
+          </font>
+         </td>
+         <td align="LEFT" id="SETI_MTG_TIME5">
+          <font face="Arial" size="2">
+           TR8
+          </font>
+         </td>
+         <td align="LEFT" id="BLD_ROOM5">
+          <font face="Arial" size="2">
+           LU116
+          </font>
+         </td>
+         <td align="LEFT" id="5">
+          <font face="Arial" size="2">
+           HART
+          </font>
+         </td>
+        </tr>
+        <tr class="cgrldatarow" valign="TOP">
+         <td align="LEFT" id="TITLE6">
+          <font face="Arial" size="2">
+           <a href="drgwq010$sche.QueryViewByKey?P_SECOF_ID2=190762&amp;P_MIDS_ID2=75726&amp;P_0=75726&amp;P_18=192325&amp;Z_CHK=52361" target="_top">
+            PHYSICAL EDUC-2/C SWIMMING
+           </a>
+          </font>
+         </td>
+         <td align="LEFT" id="COURSE_NBR6">
+          <font face="Arial" size="2">
+           PE301
+          </font>
+         </td>
+         <td align="LEFT" id="SECT6">
+          <font face="Arial" size="2">
+           0251
+          </font>
+         </td>
+         <td align="LEFT" id="SETI_MTG_TIME6">
+          <font face="Arial" size="2">
+           F2
+          </font>
+         </td>
+         <td align="LEFT" id="BLD_ROOM6">
+          <font face="Arial" size="2">
+           LJ_POOL
+          </font>
+         </td>
+         <td align="LEFT" id="6">
+          <font face="Arial" size="2">
+           SCHWOB
+          </font>
+         </td>
+        </tr>
+        <tr class="cgrldatarow" valign="TOP">
+         <td align="LEFT" id="TITLE7">
+          <font face="Arial" size="2">
+           <a href="drgwq010$sche.QueryViewByKey?P_SECOF_ID2=192046&amp;P_MIDS_ID2=75726&amp;P_0=75726&amp;P_18=192325&amp;Z_CHK=51590" target="_top">
+            THEORY OF COMPUTING
+           </a>
+          </font>
+         </td>
+         <td align="LEFT" id="COURSE_NBR7">
+          <font face="Arial" size="2">
+           SI342
+          </font>
+         </td>
+         <td align="LEFT" id="SECT7">
+          <font face="Arial" size="2">
+           4001
+          </font>
+         </td>
+         <td align="LEFT" id="SETI_MTG_TIME7">
+          <font face="Arial" size="2">
+           MWRF4
+          </font>
+         </td>
+         <td align="LEFT" id="BLD_ROOM7">
+          <font face="Arial" size="2">
+           HP108
+          </font>
+         </td>
+         <td align="LEFT" id="7">
+          <font face="Arial" size="2">
+           SULLIVAN
+          </font>
+         </td>
+        </tr>
+       </table>
+       <p>
+        Records 1 to 7 of 7
+        <p>
+         <p>
+          <font face="Arial" size="2">
+           <b>
+            Total Credits:
+           </b>
+           19
+           <p>
+            <b>
+             Free Periods:
+            </b>
+            M 27 T 34567 W 27 R 37 F 67 S 1234567
+           </p>
+          </font>
+          <font color="#000080">
+           <h2 align="LEFT">
+            Schedule Matrix
+           </h2>
+          </font>
+          <table border="" cellpadding="5" cellspacing="0">
+           <tr>
+            <th align="bottom" colspan="1" rowspan="2">
+             <font face="Arial" size="2">
+              Period
+             </font>
+            </th>
+            <th align="center" colspan="6" rowspan="1">
+             <font face="Arial" size="2">
+              Day
+             </font>
+            </th>
+           </tr>
+           <tr>
+            <th>
+             <font face="Arial" size="2">
+              MON
+             </font>
+            </th>
+            <th>
+             <font face="Arial" size="2">
+              TUE
+             </font>
+            </th>
+            <th>
+             <font face="Arial" size="2">
+              WED
+             </font>
+            </th>
+            <th>
+             <font face="Arial" size="2">
+              THU
+             </font>
+            </th>
+            <th>
+             <font face="Arial" size="2">
+              FRI
+             </font>
+            </th>
+            <th>
+             <font face="Arial" size="2">
+              SAT
+             </font>
+            </th>
+           </tr>
+           <tr>
+            <td>
+             <font face="Arial" size="2">
+              1
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              NL310
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              NL410
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              NL310
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              NL410
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              NL310
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <font face="Arial" size="2">
+              2
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              NL410
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              NL410
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              PE301
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <font face="Arial" size="2">
+              3
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              IC312
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              IC312
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              IC312
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <font face="Arial" size="2">
+              4
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              SI342
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              SI342
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              SI342
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              SI342
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <font face="Arial" size="2">
+              5
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              FE210
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              FE210
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              IC322
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              FE210
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <font face="Arial" size="2">
+              6
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              IC322
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              IC322
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+              IC322
+              <br/>
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+           </tr>
+           <tr>
+            <td>
+             <font face="Arial" size="2">
+              7
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+            <td>
+             <font face="Arial" size="2">
+             </font>
+            </td>
+           </tr>
+          </table>
+          <p>
+           <p>
+            <img src="/ows-img/line.gif"/>
+            <br/>
+            <a href="/ITSD/mids/drgwq010$.showabout">
+             <img alt="Module Help" border="0" height="20" naturalsizeflag="0" src="/mids-img/help.gif" width="130"/>
+            </a>
+            <a href="/ITSD/mids/drgwq010$.startup" target="_top">
+             <img alt="Return back to the first page" border="0" height="20" naturalsizeflag="0" src="/mids-img/return.gif" width="130"/>
+            </a>
+            <a href="https://mids.usna.edu" target="_top">
+             <img alt="Back to the Midshipmen Information System" border="0" height="20" naturalsizeflag="0" src="/mids-img/midshome.gif" width="130"/>
+            </a>
+            <a href="/ITSD/mids/sc_pkg.display_user_urls?p_level1_area_in=AC" target="_top">
+             <img alt="Return to Academic Center" border="0" height="20" naturalsizeflag="0" src="/mids-img/AC.gif" width="130"/>
+            </a>
+            <a href="/ITSD/mids/sc_pkg.display_user_urls?p_level1_area_in=AD" target="_top">
+             <img alt="Return to Associate Dean for Academic Affairs" border="0" height="20" naturalsizeflag="0" src="/mids-img/AD.gif" width="130"/>
+            </a>
+            <a href="/ITSD/mids/sc_pkg.display_user_urls?p_level1_area_in=CS" target="_top">
+             <img alt="Return to Commandant's Staff" border="0" height="20" naturalsizeflag="0" src="/mids-img/CS.gif" width="130"/>
+            </a>
+            <a href="/ITSD/mids/sc_pkg.display_user_urls?p_level1_area_in=DC" target="_top">
+             <img alt="Return to Department Chair" border="0" height="20" naturalsizeflag="0" src="/mids-img/DC.gif" width="130"/>
+            </a>
+            <a href="/ITSD/mids/sc_pkg.display_user_urls?p_level1_area_in=FA" target="_top">
+             <img alt="Return to Faculty" border="0" height="20" naturalsizeflag="0" src="/mids-img/FA.gif" width="130"/>
+            </a>
+            <a href="/ITSD/mids/sc_pkg.display_user_urls?p_level1_area_in=GA" target="_top">
+             <img alt="Return to General Academics" border="0" height="20" naturalsizeflag="0" src="/mids-img/GA.gif" width="130"/>
+            </a>
+            <a href="/ITSD/mids/sc_pkg.display_user_urls?p_level1_area_in=LO" target="_top">
+             <img alt="Return to Logistics" border="0" height="20" naturalsizeflag="0" src="/mids-img/LO.gif" width="130"/>
+            </a>
+            <a href="/ITSD/mids/sc_pkg.display_user_urls?p_level1_area_in=MO" target="_top">
+             <img alt="Return to Mid Personnel Office" border="0" height="20" naturalsizeflag="0" src="/mids-img/MO.gif" width="130"/>
+            </a>
+            <a href="/ITSD/mids/sc_pkg.display_user_urls?p_level1_area_in=MD" target="_top">
+             <img alt="Return to Midshipmen" border="0" height="20" naturalsizeflag="0" src="/mids-img/MD.gif" width="130"/>
+            </a>
+            <a href="/ITSD/mids/sc_pkg.display_user_urls?p_level1_area_in=PE" target="_top">
+             <img alt="Return to Physical Education" border="0" height="20" naturalsizeflag="0" src="/mids-img/PE.gif" width="130"/>
+            </a>
+            <a href="/ITSD/mids/sc_pkg.display_user_urls?p_level1_area_in=PD" target="_top">
+             <img alt="Return to Professional Development" border="0" height="20" naturalsizeflag="0" src="/mids-img/PD.gif" width="130"/>
+            </a>
+            <a href="/ITSD/mids/sc_pkg.display_user_urls?p_level1_area_in=RE" target="_top">
+             <img alt="Return to Registrar" border="0" height="20" naturalsizeflag="0" src="/mids-img/RE.gif" width="130"/>
+            </a>
+            <a href="sc_pkg.log_off">
+             <img alt="Log off" border="0" height="20" naturalsizeflag="0" src="/mids-img/midslogoff.gif" width="130"/>
+            </a>
+           </p>
+          </p>
+         </p>
+        </p>
+       </p>
+      </p>
+     </p>
+    </p>
+   </p>
+  </p>
+ </body>
+</html>

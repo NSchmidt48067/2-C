@@ -15,7 +15,7 @@ def createH():
 
 
 
-url = "https://mids.usna.edu/ITSD/mids/drgwq010$.startup"
+url = "https://mids.usna.edu/ITSD/mids/drgwq010$mids.actionquery"
 
 d = createH()
 
@@ -27,7 +27,7 @@ header = d
 
 
 payload = {
-    'P_ALPHA': '265646',
+    'P_ALPHA': input("Enter an Alpha: "),
     'P_LAST_NAME': '',
     'P_MICO_CO_NBR':'', 
     'P_SECOF_COOF_SEBLDA_AC_YR':'2025',
@@ -43,9 +43,18 @@ response = requests.post(url, data=payload,headers=header)
 
 print(f'Status Code: {response.status_code}')
 
-#parsed = BeautifulSoup(response.content, "html.parser")
+parsed = BeautifulSoup(response.content, "html.parser")
 
-#file = open('file.html', 'w')
-#file.write(str(parsed))
+file = open('file.html', 'w')
+file.write(str(parsed.prettify()))
+file.close()
 
-#print(parsed)
+
+file = open('file.html', 'r')
+data = file.read()
+
+line = parsed.find_all("td")
+for index, stuff in enumerate(line):
+    print(stuff.text)
+    if (index == 50):
+        break
