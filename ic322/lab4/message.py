@@ -19,12 +19,7 @@ url = "https://mids.usna.edu/ITSD/mids/drgwq010$mids.actionquery"
 
 d = createH()
 
-#for i in d:
- #  print (i, d[i])
-
 header = d
-
-
 
 payload = {
     'P_ALPHA': input("Enter an Alpha: "),
