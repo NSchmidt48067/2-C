@@ -75,22 +75,32 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
   public void setCapacity(int capacity) {
     @SuppressWarnings("unchecked")
     T[] temp = (T[]) new Object[capacity];
-    int count = capacity - 1;
-    int newTail;
+    int count;
     
-    //DO THIS IN REVERSE
-    for (int i = tail; i != head; i = (i - 1 + this.capacity) % this.capacity) {
-        temp[count] = elements[i];
-        count--;
-
-        if (count == 0)
-          break;
+    if (size >= capacity) {
+      count = capacity - 1;
+      }
+    else {
+      count = size - 1;
     }
-    if (size > capacity){
+    System.out.println(size);
+    int i = tail;
+    do {
+      i = (i - 1 + this.capacity) % this.capacity;
+      if (capacity == 1) {
+        System.out.println(count + " " + i);
+      }
+      temp[count] = elements[i];
+      count--;
+      if (count == -1)
+        break;
+    }while(i != head);
+
+    if (size >= capacity){
       size = capacity;
     }
-    head = count;
-    tail = (size + head) % capacity;//Tail != size; Needs to be something else
+    head = 0;
+    tail = size;
     this.capacity = capacity;
 
     elements = temp;
@@ -131,9 +141,8 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[ ");
-    for (int i = 0; i < size; ++i) {
+    for (int i = 0; i < size; i++) {
       sb.append(get(i).toString());
-      System.out.println(i + " " + get(i));
       sb.append(' ');
     }
     sb.append(']');
@@ -144,10 +153,17 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     BoundedStack<Integer> stk = new MyBoundedStack<>(3);
     stk.push(10);
     stk.push(20);
+        //System.out.println(stk.get(0));
     stk.setCapacity(5);
     stk.push(30);
     stk.push(40);
-    System.out.println(stk.toString());
+    // System.out.println(stk.get(0));
+    // System.out.println(stk.get(1));
+    // System.out.println(stk.get(2));
+    // System.out.println(stk.get(3));
+
+    //System.out.println(stk.toString());
+
     if (40 == (int)stk.pop()) {
       System.out.println("success");
     }
@@ -166,10 +182,10 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     stk.push(100);
     stk.push(200);
     stk.push(300);
-
+    
     stk.setCapacity(1);
-    if (stk.isEmpty()) {
-      System.out.println("empty");
+    if (!stk.isEmpty()) {
+      System.out.println("not empty");
     }
     if (300 == (int)stk.pop()) {
       System.out.println("success");
