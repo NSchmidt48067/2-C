@@ -90,6 +90,7 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     int i = tail;
     do {
       i = (i - 1 + this.capacity) % this.capacity;
+      temp[count] = 3;
       temp[count] = elements[i];
       count--;
       if (count == -1)
