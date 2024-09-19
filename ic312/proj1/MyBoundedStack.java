@@ -35,6 +35,9 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
   public void push(T item) {
     if (capacity == 1) {
       elements[0] = item;
+      if (size == 0) {
+        size++;
+      }
     }
     else {
       elements[tail] = item;
