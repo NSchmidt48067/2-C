@@ -1,4 +1,5 @@
 import requests
+import getpass
 from bs4 import BeautifulSoup
 #!/usr/bin/env python3
 
@@ -16,8 +17,8 @@ def createH(cookiejar):
             d[key.strip()] = value.strip()
     return d
 
-usr = "m265646"
-pswrd = "MarryIsabelle12@$"
+usr = input("Enter username: ")
+pswrd = getpass.getpass()
 
 url = "https://login.usna.edu/oam/server/obrareq.cgi?encquery%3DPXq8TVWSS0EtxtXCaw%2Bo2WNCh7r6uwn726eOcS%2Bdi6UFI7UGU0fMfHYk8%2FaetBWmD1aM3zH0bkj1lDaSTfhuPRhu7Bb6w4ihGONOe%2BL1YgGseh90pyErekmsxjEkOMCakqx3BfgHT8SX6gu3WJtIaMuk2ejMQrQCSFvQA%2BnrRs9B9pmyWiCihiQSMf1g%2FV7wRGwpjBZR52O6RCMTfVNrcOXEBhtQSFTqE2Fm4sw9mgZhYM3zTzde7a1YOdrJEBD3jVtXixiBU4bJK5z7WfC6yw%3D%3D%20agentid%3DUSNA_OHS12c_WebGateAgent%20ver%3D1%20crmethod%3D2"
 
