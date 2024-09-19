@@ -33,8 +33,8 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
    * removed from the BOTTOM of the stack.
    */
   public void push(T item) {
-    if (tail == size) {
-      tail--;
+    if (capacity == 1) {
+      tail = head;
     }
     elements[tail] = item;
     tail = (tail + 1) % capacity;
