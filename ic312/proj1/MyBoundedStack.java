@@ -18,7 +18,7 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
   private int capacity = 0;
   //head keeps track of where the start and end of the array is
   private int head = 0;
-  private int tail = 0;
+  private int tail = -1;
 
   public MyBoundedStack(int capacity) {
     @SuppressWarnings("unchecked")
@@ -33,25 +33,15 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
    * removed from the BOTTOM of the stack.
    */
   public void push(T item) {
-    if (capacity == 1) {
-      elements[0] = item;
-      if (size == 0) {
-        size++;
-      }
-    }
-    else {
-      elements[tail] = item;
-      tail = (tail + 1) % capacity;
     if (size == capacity) {
-      head = (head + 1) % capacity;
+        head = (head + 1) % capacity;
+    } else {
+        size++;
     }
-    else {
-      size++;
-    }
+    tail = (tail + 1) % capacity; 
+    elements[tail] = item;
     }
 
-
-  }
 
   /** Removes and returns the element at the top of the stack.
    * @throws NoSuchElementException if the stack is empty.
@@ -62,9 +52,14 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
         throw new NoSuchElementException("The Stack is empty");
     }
     else {
-      tail = (tail - 1 + capacity) % capacity;
       T item = elements[tail];
       elements[tail] = null;
+      if (size == 1) {
+        tail = -1;
+      }
+      else {
+        tail = (tail - 1 + this.capacity) % this.capacity;
+      }
       size--;
       return item;
     }
@@ -94,18 +89,20 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     }
     int i = tail;
     do {
-      i = (i - 1 + this.capacity) % this.capacity;
-      temp[count] = elements[i];
-      count--;
       if (count == -1)
         break;
-    }while(i != head);
+      temp[count] = elements[head];
+      temp[count] = elements[i];
+      i = (i - 1 + this.capacity) % this.capacity;
+      count--;
+
+    }while(i != head - 1);
 
     if (size >= capacity){
       size = capacity;
     }
     head = 0;
-    tail = size;
+    tail = size - 1;
     this.capacity = capacity;
 
     elements = temp;
@@ -126,7 +123,7 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     T[] temp = (T[]) new Object[capacity];
     elements = temp;
     head = 0;
-    tail = 0;
+    tail = -1;
     size = 0;
   }
 
@@ -197,5 +194,6 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     // }    
     // if (stk.isEmpty()) {
     //   System.out.println("empty");
-    }
+    // }
+  }
 }
