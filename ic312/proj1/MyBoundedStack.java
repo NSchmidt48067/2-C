@@ -33,10 +33,11 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
    * removed from the BOTTOM of the stack.
    */
   public void push(T item) {
-    if (capacity == 1) {
-      tail = head;
-    }
+    try {
     elements[tail] = item;
+    } catch (IndexOutOfBoundsException e) {
+      elements[0] = item;
+    }
     tail = (tail + 1) % capacity;
 
     if (size == capacity) {
