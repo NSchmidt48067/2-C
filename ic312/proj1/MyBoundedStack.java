@@ -33,22 +33,41 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
    * removed from the BOTTOM of the stack.
    */
   public void push(T item) {
-    if (capacity == 1) {
-      elements[0] = item;
-      if (size == 0) {
-        size++;
-      }
-    }
-    else {
-      elements[tail] = item;
-      tail = (tail + 1) % capacity;
-    if (size == capacity) {
+    elements[tail] = item;// tail = 0
+    tail = (tail + 1) % capacity; // tail = 1
+
+    //Array = full; move head
+    //Tail will be off by one
+    //head will be equal to tail once array is full
+    if (tail + 1 == head) {
       head = (head + 1) % capacity;
     }
     else {
       size++;
     }
-    }
+    //Idea is that the head is always the actual start place
+    //Tail = head once it circles around to the front
+    //Tail will always be 1 more than its actual spot
+      //This means when pushing, just set the value right there
+      //When popping/setCapacity, use tail - 1
+
+
+
+    // if (capacity == 1) {
+    //   elements[0] = item;
+    //   if (size == 0) 
+    //     size++;
+    // }
+    // else {
+    //   elements[tail] = item;
+    //   tail = (tail + 1) % capacity;
+    // if (size == capacity) {
+    //   head = (head + 1) % capacity;
+    // }
+    // else {
+    //   size++;
+    // }
+    // }
 
 
   }
@@ -62,10 +81,17 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
         throw new NoSuchElementException("The Stack is empty");
     }
     else {
+      //tail is off by 1, minus 1 puts it to the correct spot
       tail = (tail - 1 + capacity) % capacity;
-      T item = elements[tail];
-      elements[tail] = null;
-      size--;
+      T item = elements[tail];//get item
+      elements[tail] = null;//set value to null
+      //tail is now one off of next value
+      if (size <= 1) {
+        size = 0;
+      }
+      else {
+        size--;//array is not empty yet
+      }
       return item;
     }
   }
@@ -84,8 +110,22 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
   public void setCapacity(int capacity) {
     @SuppressWarnings("unchecked")
     T[] temp = (T[]) new Object[capacity];
-    int count;
-    
+    int count = 0;
+
+    //move array over backwards and then make it forward
+    //i = tail -1 because tail is always off by 1
+    for (int i = (tail - 1 + this.capacity) % this.capacity; count < capacity && elements[i] != null; i = (i - 1 + this.capacity) % this.capacity) {
+      temp[count] = elements[i];//0 = tail
+      count++;
+    }
+    //Array has been moved over, but is backwards
+    //Make it forwards
+    for (int i = 0; i < size; i++) {
+//^wrong; not size
+      count--;
+    }
+
+
     if (size >= capacity) {
       count = capacity - 1;
       }
