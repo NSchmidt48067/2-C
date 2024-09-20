@@ -28,7 +28,7 @@ public class MyText implements Text {
 
     /** Returns the character at the current cursor position. */
   public char get() throws NoSuchElementException {
-    if (cursor == null) {
+    if (cursor.next == null) {
       throw new NoSuchElementException("There is no data to get");
     }
     else {
@@ -67,15 +67,11 @@ public class MyText implements Text {
       throw new NoSuchElementException("There is no data to delete");
     }
     else {
-      try {
-        //Change node's 'prev' after deleted to current node
-        cursor.next.next.prev = cursor;
-        //Change current node's 'next' to deleted next's
-        cursor.next = cursor.next.next;
-      } catch(NullPointerException e) {
-        //If there are fewer than 3 nodes, just delete the next node
-        cursor.next = null;
+      Node temp = cursor.next;
+      if (temp.next != null) {
+        temp.next.prev = cursor;
       }
+      cursor.next = temp.next;
     }
   }
 
@@ -93,7 +89,12 @@ public class MyText implements Text {
    * @throws NoSuchElementException if the cursor is already at the beginning.
    */
   public void moveLeft() throws NoSuchElementException {
-    cursor = cursor.prev;
+    if (cursor.prev == null) {
+      throw new NoSuchElementException("Cannot move left");
+    }
+    else {
+      cursor = cursor.prev;
+    }
   }
 
   /** Returns whether the cursor is NOT at the end. */
@@ -110,8 +111,12 @@ public class MyText implements Text {
    * @throws NoSuchElementException if the cursor is already at the end.
    */
   public void moveRight() throws NoSuchElementException {
-    cursor = cursor.next;
-  }
+    if (cursor.next == null) {
+      throw new NoSuchElementException("Cannot move right");
+    }
+    else {
+      cursor = cursor.next;
+    }  }
 
   /** Displays the current sequence of characters one one line, with the cursor underneath.
    *
@@ -132,15 +137,9 @@ public class MyText implements Text {
     }
     System.out.println();
 
-    for (Node temp = head; temp != null; temp = temp.next ) {
-      if (temp == cursor) {
-        System.out.print("^");
-        break;
-      }
-      else {
+    for (Node temp = head; temp != cursor; temp = temp.next ) {
         System.out.print(" ");
-      }
     }
-    System.out.println();
+    System.out.println("^");
   }
 }
