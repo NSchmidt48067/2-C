@@ -40,6 +40,7 @@ public class Editor {
       case 'i':
         if (line.length() == 2){
           store(line);
+          R.clear();
           txt.insert(line.charAt(1));
         }
         else {showError();}
