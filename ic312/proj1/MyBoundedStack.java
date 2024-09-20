@@ -1,16 +1,6 @@
 import java.util.NoSuchElementException;
 import java.util.*;
 
-/** A stack with limited (but changeable) capacity.
- *
- * When new items pushed, the go on the "top" of the stack.
- * Calling pop() also removes from the "top" of the stack,
- * so that push/pop are LIFO.
- *
- * But stacks also have a fixed capacity. WHen calling push(),
- * if the stack is already at its capacity, the oldest item
- * ("bottom" of the stack) is silently removed.
- */
 public class MyBoundedStack<T> implements BoundedStack<T> {
   @SuppressWarnings("unchecked")
   private T[] elements;
@@ -18,7 +8,7 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
   private int capacity = 0;
   //head keeps track of where the start and end of the array is
   private int head = 0;
-  private int tail = 0;
+  private int tail = -1;
 
   public MyBoundedStack(int capacity) {
     @SuppressWarnings("unchecked")
@@ -28,14 +18,8 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
   }
 
   public void push(T item) {
-    if (capacity == 1) {
-      elements[0] = item;
-      size = 1;
-      }
-    
-    else {
-      elements[tail] = item;
       tail = (tail + 1) % capacity;
+      elements[tail] = item;
     if (size == capacity) {
       head = (head + 1) % capacity;
     }
@@ -44,8 +28,6 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     }
     }
 
-
-  }
 
   /** Removes and returns the element at the top of the stack.
    * @throws NoSuchElementException if the stack is empty.
@@ -56,42 +38,43 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
         throw new NoSuchElementException("The Stack is empty");
     }
     else {
-      tail = (tail - 1 + capacity) % capacity;
       T item = elements[tail];
       elements[tail] = null;
+      tail = tail - 1;
       size--;
       return item;
     }
   }
 
-  public void setCapacity(int newCapacity) {
-      @SuppressWarnings("unchecked")
-      T[] temp = (T[]) new Object[capacity];
-      int count;
-      
-      if (size >= capacity) {
-        count = capacity - 1;
-        }
-      else {
-        count = size - 1;
+  public void setCapacity(int capacity) {
+    @SuppressWarnings("unchecked")
+    T[] temp = (T[]) new Object[capacity];
+    int count;
+    
+    if (size >= capacity) {
+      count = capacity - 1;
       }
-      int i = tail;
-      do {
-        i = (i - 1 + this.capacity) % this.capacity;
-        temp[count] = elements[i];
-        count--;
-        if (count == -1)
-          break;
-      }while(i != head);
+    else {
+      count = size - 1;
+    }
+    int i = tail;
+    do {
+      temp[count] = elements[head];
+      temp[count] = elements[i];
+      i = (i - 1 + this.capacity) % this.capacity;
+      count--;
+      if (count == -1)
+        break;
+    }while(i != head - 1);
 
-      if (size >= capacity){
-        size = capacity;
-      }
-      head = 0;
-      tail = size;
-      this.capacity = capacity;
+    if (size >= capacity){
+      size = capacity;
+    }
+    head = 0;
+    tail = size - 1;
+    this.capacity = capacity;
 
-      elements = temp;
+    elements = temp;
   }
 
   /** Returns whether the stack is currently empty. */
@@ -109,11 +92,11 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     T[] temp = (T[]) new Object[capacity];
     elements = temp;
     head = 0;
-    tail = 0;
+    tail = -1;
     size = 0;
   }
 
-
+    //Helper Functions to make debugging easier
     public T get(int num) {
         return elements[(num + this.head) % this.capacity];
     }
@@ -136,4 +119,5 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     sb.append(']');
     return sb.toString();
   }
+
 }
