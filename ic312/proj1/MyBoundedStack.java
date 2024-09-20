@@ -1,6 +1,16 @@
 import java.util.NoSuchElementException;
 import java.util.*;
 
+/** A stack with limited (but changeable) capacity.
+ *
+ * When new items pushed, the go on the "top" of the stack.
+ * Calling pop() also removes from the "top" of the stack,
+ * so that push/pop are LIFO.
+ *
+ * But stacks also have a fixed capacity. WHen calling push(),
+ * if the stack is already at its capacity, the oldest item
+ * ("bottom" of the stack) is silently removed.
+ */
 public class MyBoundedStack<T> implements BoundedStack<T> {
   @SuppressWarnings("unchecked")
   private T[] elements;
@@ -8,7 +18,7 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
   private int capacity = 0;
   //head keeps track of where the start and end of the array is
   private int head = 0;
-  private int tail = -1;
+  private int tail = 0;
 
   public MyBoundedStack(int capacity) {
     @SuppressWarnings("unchecked")
@@ -17,17 +27,26 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     this.capacity = capacity;
   }
 
+  /** Adds a new element to the top of the stack.
+   *
+   * If the stack is already at its capacity, a single item is
+   * removed from the BOTTOM of the stack.
+   */
   public void push(T item) {
-      tail = (tail + 1) % capacity;
-      elements[tail] = item;
+    try {
+    elements[tail] = item;
+    } catch (IndexOutOfBoundsException e) {
+      elements[0] = item;
+    }
+    tail = (tail + 1) % capacity;
+
     if (size == capacity) {
       head = (head + 1) % capacity;
     }
     else {
-      size++;
+    size++;
     }
-    }
-
+  }
 
   /** Removes and returns the element at the top of the stack.
    * @throws NoSuchElementException if the stack is empty.
@@ -38,14 +57,25 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
         throw new NoSuchElementException("The Stack is empty");
     }
     else {
+      tail = (tail - 1 + capacity) % capacity;
       T item = elements[tail];
       elements[tail] = null;
-      tail = tail - 1;
       size--;
       return item;
     }
   }
 
+  /** Changes the capacity to the given value.
+   *
+   * If the current capacity is greater than the given capacity,
+   * then elements may need to be removed from the BOTTOM of the
+   * stack so that it reaches the desired capacity.
+   *
+   * This affects all future push/pop operations, but not past
+   * ones. That is, increasing the capacity does not make
+   * the stack magically "remember" things which have already been
+   * removed.
+   */
   public void setCapacity(int capacity) {
     @SuppressWarnings("unchecked")
     T[] temp = (T[]) new Object[capacity];
@@ -59,19 +89,18 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     }
     int i = tail;
     do {
-      temp[count] = elements[head];
-      temp[count] = elements[i];
       i = (i - 1 + this.capacity) % this.capacity;
+      temp[count] = elements[i];
       count--;
       if (count == -1)
         break;
-    }while(i != head - 1);
+    }while(i != head);
 
     if (size >= capacity){
       size = capacity;
     }
     head = 0;
-    tail = size - 1;
+    tail = size;
     this.capacity = capacity;
 
     elements = temp;
@@ -92,11 +121,11 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     T[] temp = (T[]) new Object[capacity];
     elements = temp;
     head = 0;
-    tail = -1;
+    tail = 0;
     size = 0;
   }
 
-    //Helper Functions to make debugging easier
+
     public T get(int num) {
         return elements[(num + this.head) % this.capacity];
     }
@@ -120,4 +149,48 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     return sb.toString();
   }
 
+  public static void main(String args[]) {
+    // BoundedStack<Integer> stk = new MyBoundedStack<>(3);
+    // stk.push(10);
+    // stk.push(20);
+    //     //System.out.println(stk.get(0));
+    // stk.setCapacity(5);
+    // stk.push(30);
+    // stk.push(40);
+    // // System.out.println(stk.get(0));
+    // // System.out.println(stk.get(1));
+    // // System.out.println(stk.get(2));
+    // // System.out.println(stk.get(3));
+
+    // //System.out.println(stk.toString());
+
+    // if (40 == (int)stk.pop()) {
+    //   System.out.println("success");
+    // }
+    //     if (30 == (int)stk.pop()) {
+    //   System.out.println("success");
+    // }
+    
+    // System.out.println(stk.getAll());
+
+    //     if (20 == (int)stk.pop()) {
+    //   System.out.println("success");
+    // }
+    //     if (10 == (int)stk.pop()) {
+    //   System.out.println("success");
+    // }
+    // stk.push(100);
+    // stk.push(200);
+    // stk.push(300);
+    
+    // stk.setCapacity(1);
+    // if (!stk.isEmpty()) {
+    //   System.out.println("not empty");
+    // }
+    // if (300 == (int)stk.pop()) {
+    //   System.out.println("success");
+    // }    
+    // if (stk.isEmpty()) {
+    //   System.out.println("empty");
+    }
 }
