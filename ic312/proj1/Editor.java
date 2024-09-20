@@ -2,7 +2,8 @@ import java.util.Scanner;
 
 public class Editor {
   private Text txt = new MyText();
-  private BoundedStack<Action> stk = new MyBoundedStack<>(5);
+  private BoundedStack<Action> U = new MyBoundedStack<>(5);
+  private BoundedStack<Action> R = new MyBoundedStack<>(5);
 
   /** Displays information on available commands.
    * THis will NOT be part of any autotesting.
@@ -71,10 +72,23 @@ public class Editor {
         return false;
       //Undo case: pop action off of stack and call undo
       //undo: Runs commands to undo previous actions
+      //Adds undo to the redo stack
       case 'u':
         try {
-          Action a = stk.pop();
+          Action a = U.pop();
+          R.push(a);
           a.undo();
+        } catch (Exception e) {
+          showError();
+        }
+        break;
+        //Redo case: redo an undo
+        //Adds redo to the undo stack
+        case 'r':
+        try {
+          Action a = R.pop();
+          U.push(a);
+          a.redo();
         } catch (Exception e) {
           showError();
         }
@@ -90,7 +104,7 @@ public class Editor {
             showError();
             break;
           }
-          stk.setCapacity(num);
+          U.setCapacity(num);
         }
         else {
           showError();
@@ -108,12 +122,15 @@ public class Editor {
   public void store(String line) {
     Action act;
     if (line.charAt(0) == 'd') {
-          act = new Action(line.charAt(0), txt.get(), txt);
+      act = new Action(line.charAt(0), txt.get(), txt);
+    }
+    else if (line.charAt(0) == 'i') {
+      act = new Action(line.charAt(0), line.charAt(1), txt);
     }
     else {
       act = new Action(line.charAt(0), 'x', txt);
     }
-    stk.push(act);
+    U.push(act);
   }
 
   public static void main(String[] args) {

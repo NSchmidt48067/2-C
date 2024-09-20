@@ -40,5 +40,20 @@ public class Action {
         }
     }
 
-
+    //Undoes the redo
+    //Is empty until an undo
+    public void redo() {
+        if (cmd == '>') {
+            txt.moveRight();
+        }
+        else if (cmd == '<') {
+            txt.moveLeft();
+        }
+        else if (cmd == 'i') {
+            txt.insert(val);
+        }
+        else if (cmd == 'd') {
+            txt.delete();
+        }
+    }
 }
