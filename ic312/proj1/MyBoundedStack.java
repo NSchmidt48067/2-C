@@ -27,11 +27,6 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     this.capacity = capacity;
   }
 
-  /** Adds a new element to the top of the stack.
-   *
-   * If the stack is already at its capacity, a single item is
-   * removed from the BOTTOM of the stack.
-   */
   public void push(T item) {
     if (capacity == 1) {
       elements[0] = item;
@@ -69,60 +64,34 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     }
   }
 
-  /** Changes the capacity to the given value.
-   *
-   * If the current capacity is greater than the given capacity,
-   * then elements may need to be removed from the BOTTOM of the
-   * stack so that it reaches the desired capacity.
-   *
-   * This affects all future push/pop operations, but not past
-   * ones. That is, increasing the capacity does not make
-   * the stack magically "remember" things which have already been
-   * removed.
-   */
   public void setCapacity(int newCapacity) {
-    @SuppressWarnings("unchecked")
-    T[] temp = (T[]) new Object[newCapacity];
-    int newSize = Math.min(size, newCapacity);  // Calculate new size, discarding oldest elements if needed
-
-    // Copy only the latest elements that fit in the new capacity
-    for (int i = 0; i < newSize; i++) {
-      temp[i] = elements[(head + (size - newSize) + i) % capacity];
-    }
-
-    // Update the internal state
-    elements = temp;
-    size = newSize;
-    head = 0;
-    tail = newSize;
-    capacity = newCapacity;
-      // @SuppressWarnings("unchecked")
-      // T[] temp = (T[]) new Object[capacity];
-      // int count;
+      @SuppressWarnings("unchecked")
+      T[] temp = (T[]) new Object[capacity];
+      int count;
       
-      // if (size >= capacity) {
-      //   count = capacity - 1;
-      //   }
-      // else {
-      //   count = size - 1;
-      // }
-      // int i = tail;
-      // do {
-      //   i = (i - 1 + this.capacity) % this.capacity;
-      //   temp[count] = elements[i];
-      //   count--;
-      //   if (count == -1)
-      //     break;
-      // }while(i != head);
+      if (size >= capacity) {
+        count = capacity - 1;
+        }
+      else {
+        count = size - 1;
+      }
+      int i = tail;
+      do {
+        i = (i - 1 + this.capacity) % this.capacity;
+        temp[count] = elements[i];
+        count--;
+        if (count == -1)
+          break;
+      }while(i != head);
 
-      // if (size >= capacity){
-      //   size = capacity;
-      // }
-      // head = 0;
-      // tail = size;
-      // this.capacity = capacity;
+      if (size >= capacity){
+        size = capacity;
+      }
+      head = 0;
+      tail = size;
+      this.capacity = capacity;
 
-      // elements = temp;
+      elements = temp;
   }
 
   /** Returns whether the stack is currently empty. */
