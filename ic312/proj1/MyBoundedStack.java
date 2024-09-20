@@ -104,10 +104,16 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     @SuppressWarnings("unchecked")
     T[] temp = (T[]) new Object[capacity];
     
-    //The 2 lines below prepare the variables
+    //The lines below prepare the variables
     //that will get the values from the array.
     //count is how many elements will be in the array
-    int count = Math.min(size, capacity);
+    int count;
+    if (size >= capacity) {
+      count = capacity - 1;
+    }
+    else {
+      count = size - 1;
+    }
     //i is tail because the loop stores values in reverse
     int i = tail;
     
@@ -146,4 +152,5 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     tail = 0;
     size = 0;
   }
+
 }
