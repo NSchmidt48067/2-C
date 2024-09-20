@@ -35,9 +35,10 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
   public void push(T item) {
     if (capacity == 1) {
       elements[0] = item;
-      size = 1;
+      if (size == 0) {
+        size++;
       }
-    
+    }
     else {
       elements[tail] = item;
       tail = (tail + 1) % capacity;
@@ -80,49 +81,35 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
    * the stack magically "remember" things which have already been
    * removed.
    */
-  public void setCapacity(int newCapacity) {
+  public void setCapacity(int capacity) {
     @SuppressWarnings("unchecked")
-    T[] temp = (T[]) new Object[newCapacity];
-    int newSize = Math.min(size, newCapacity);  // Calculate new size, discarding oldest elements if needed
-
-    // Copy only the latest elements that fit in the new capacity
-    for (int i = 0; i < newSize; i++) {
-      temp[i] = elements[(head + (size - newSize) + i) % capacity];
+    T[] temp = (T[]) new Object[capacity];
+    int count;
+    
+    if (size >= capacity) {
+      count = capacity - 1;
+      }
+    else {
+      count = size - 1;
     }
+    int i = tail;
+    do {
+      if (count == -1)
+        break;
+      i = (i - 1 + this.capacity) % this.capacity;
+      temp[count] = elements[head];
+      temp[count] = elements[i];
+      count--;
+    }while(i != head);
 
-    // Update the internal state
-    elements = temp;
-    size = newSize;
+    if (size >= capacity){
+      size = capacity;
+    }
     head = 0;
-    tail = newSize;
-    capacity = newCapacity;
-      // @SuppressWarnings("unchecked")
-      // T[] temp = (T[]) new Object[capacity];
-      // int count;
-      
-      // if (size >= capacity) {
-      //   count = capacity - 1;
-      //   }
-      // else {
-      //   count = size - 1;
-      // }
-      // int i = tail;
-      // do {
-      //   i = (i - 1 + this.capacity) % this.capacity;
-      //   temp[count] = elements[i];
-      //   count--;
-      //   if (count == -1)
-      //     break;
-      // }while(i != head);
+    tail = size;
+    this.capacity = capacity;
 
-      // if (size >= capacity){
-      //   size = capacity;
-      // }
-      // head = 0;
-      // tail = size;
-      // this.capacity = capacity;
-
-      // elements = temp;
+    elements = temp;
   }
 
   /** Returns whether the stack is currently empty. */
@@ -167,4 +154,49 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     sb.append(']');
     return sb.toString();
   }
+
+  public static void main(String args[]) {
+    // BoundedStack<Integer> stk = new MyBoundedStack<>(3);
+    // stk.push(10);
+    // stk.push(20);
+    //     //System.out.println(stk.get(0));
+    // stk.setCapacity(5);
+    // stk.push(30);
+    // stk.push(40);
+    // // System.out.println(stk.get(0));
+    // // System.out.println(stk.get(1));
+    // // System.out.println(stk.get(2));
+    // // System.out.println(stk.get(3));
+
+    // //System.out.println(stk.toString());
+
+    // if (40 == (int)stk.pop()) {
+    //   System.out.println("success");
+    // }
+    //     if (30 == (int)stk.pop()) {
+    //   System.out.println("success");
+    // }
+    
+    // System.out.println(stk.getAll());
+
+    //     if (20 == (int)stk.pop()) {
+    //   System.out.println("success");
+    // }
+    //     if (10 == (int)stk.pop()) {
+    //   System.out.println("success");
+    // }
+    // stk.push(100);
+    // stk.push(200);
+    // stk.push(300);
+    
+    // stk.setCapacity(1);
+    // if (!stk.isEmpty()) {
+    //   System.out.println("not empty");
+    // }
+    // if (300 == (int)stk.pop()) {
+    //   System.out.println("success");
+    // }    
+    // if (stk.isEmpty()) {
+    //   System.out.println("empty");
+    }
 }
