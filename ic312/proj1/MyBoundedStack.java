@@ -42,14 +42,13 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     else {
       elements[tail] = item;
       tail = (tail + 1) % capacity;
-    if (size == capacity) {
-      head = (head + 1) % capacity;
+      if (size == capacity) {
+        head = (head + 1) % capacity;
+      }
+      else {
+        size++;
+      }
     }
-    else {
-      size++;
-    }
-    }
-
 
   }
 
@@ -132,16 +131,13 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
   }
 
 
+    //Helper methods that came in handy when debugging
     public T get(int num) {
         return elements[(num + this.head) % this.capacity];
     }
-
     public String getAll(){
       return size + " " + head + " " + tail;
     }
-
-
-
       @Override
   // this produces a string like "[ 1 2 3 4 ]"
   public String toString() {
@@ -154,49 +150,4 @@ public class MyBoundedStack<T> implements BoundedStack<T> {
     sb.append(']');
     return sb.toString();
   }
-
-  public static void main(String args[]) {
-    // BoundedStack<Integer> stk = new MyBoundedStack<>(3);
-    // stk.push(10);
-    // stk.push(20);
-    //     //System.out.println(stk.get(0));
-    // stk.setCapacity(5);
-    // stk.push(30);
-    // stk.push(40);
-    // // System.out.println(stk.get(0));
-    // // System.out.println(stk.get(1));
-    // // System.out.println(stk.get(2));
-    // // System.out.println(stk.get(3));
-
-    // //System.out.println(stk.toString());
-
-    // if (40 == (int)stk.pop()) {
-    //   System.out.println("success");
-    // }
-    //     if (30 == (int)stk.pop()) {
-    //   System.out.println("success");
-    // }
-    
-    // System.out.println(stk.getAll());
-
-    //     if (20 == (int)stk.pop()) {
-    //   System.out.println("success");
-    // }
-    //     if (10 == (int)stk.pop()) {
-    //   System.out.println("success");
-    // }
-    // stk.push(100);
-    // stk.push(200);
-    // stk.push(300);
-    
-    // stk.setCapacity(1);
-    // if (!stk.isEmpty()) {
-    //   System.out.println("not empty");
-    // }
-    // if (300 == (int)stk.pop()) {
-    //   System.out.println("success");
-    // }    
-    // if (stk.isEmpty()) {
-    //   System.out.println("empty");
-    }
 }
