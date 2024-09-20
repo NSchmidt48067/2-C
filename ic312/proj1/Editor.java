@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 public class Editor {
   private Text txt = new MyText();
+  private BoundedStack<Action> stk = new MyBoundedStack<>(5);
 
   /** Displays information on available commands.
    * THis will NOT be part of any autotesting.
@@ -36,23 +37,35 @@ public class Editor {
     if (line.length() == 0) line = "h";
     switch (line.charAt(0)) {
       case 'i':
-        if (line.length() == 2)
+        if (line.length() == 2){
+          Action act = new Action(line.charAt(0), 'x', txt);
+          stk.push(act);
           txt.insert(line.charAt(1));
-        else showError();
+        }
+        else {showError();}
         break;
       case 'd':
-        if (txt.canMoveRight())
+        if (txt.canMoveRight()){
+          Action act = new Action(line.charAt(0), txt.get(), txt);
+          stk.push(act);
           txt.delete();
+        }
         else showError();
         break;
       case '<':
-        if (txt.canMoveLeft())
+        if (txt.canMoveLeft()) {
+          Action act = new Action(line.charAt(0), 'x', txt);
+          stk.push(act);
           txt.moveLeft();
+        }
         else showError();
         break;
       case '>':
-        if (txt.canMoveRight())
+        if (txt.canMoveRight()) {
+          Action act = new Action(line.charAt(0), 'x', txt);
+          stk.push(act);
           txt.moveRight();
+        }
         else showError();
         break;
       case 'p':
@@ -60,10 +73,39 @@ public class Editor {
         break;
       case 'q':
         return false;
+      case 'u':
+        try {
+          Action a = stk.pop();
+          a.Decipher();
+        } catch (Exception e) {
+          showError();
+        }
+        break;
+      case 'c':
+        if (line.length() > 1) {
+          String temp = line.substring(1);
+          int num = 0;
+          try {
+            num = Integer.parseInt(temp);
+          } catch (NumberFormatException e) {
+            showError();
+            break;
+          }
+          stk.setCapacity(num);
+        }
+        else {
+          showError();
+        }
+        break;
       default:
         showHelp();
     }
     return true;
+  }
+
+  private Text copy(Text t) {
+    Text temp = t;
+    return temp;
   }
 
   public static void main(String[] args) {
