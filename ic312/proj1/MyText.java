@@ -1,12 +1,18 @@
+// Author: Nathaniel Schmidt
+// File: MyText.java
+// Purpose: To use a Linked List
+//that acts as a text editor
+// Makes use of a doubly linked list
+
 import java.util.NoSuchElementException;
 import java.lang.NullPointerException;
 
-//Linked List
-
-
 public class MyText implements Text {
+  //Establish Node class
   private class Node {
     char data;
+    //next and prev allow for a cursor
+    //to move between nodes freely
     Node next;
     Node prev;
 
@@ -18,9 +24,13 @@ public class MyText implements Text {
   }
 
 
-  //Blank head Node to make insertion and deletion easier
+  // Blank head Node to make insertion and deletion easier
   private Node head = new Node('x', null, null);
   private Node cursor = head;
+
+  // This List will hold the cursor 1 node before the actual placement
+  // Ex) blank header node means inserting the first char will be 
+  //at node 2
 
   //Constructor
   public MyText() {}
@@ -32,6 +42,7 @@ public class MyText implements Text {
       throw new NoSuchElementException("There is no data to get");
     }
     else {
+      //REMINDER: cursor is 1 before actual placement
     return cursor.next.data;
     }
   }
@@ -40,14 +51,15 @@ public class MyText implements Text {
   public void insert(char c) {
     cursor = insert(cursor, c);
   }
+
   //Helper method so user doesn't know the imlpementation
   private Node insert(Node cur, char data) {
-    if (cur.next == null) {
+    if (cur.next == null) {//At end of list
       //Create new node and move cursor to the next node
       cur.next = new Node(data, null, cur);
       return cur.next;
     } 
-    else {
+    else {//Insert node between two nodes
       Node temp = new Node(data, null, null);
       temp.next = cur.next;
       cur.next.prev = temp;
@@ -63,10 +75,10 @@ public class MyText implements Text {
    * @throws NoSuchElementException if the cursor is at the end.
    */
   public void delete() throws NoSuchElementException {
-    if (cursor.next == null) {//At end of list and not 
+    if (cursor.next == null) {//At end of list
       throw new NoSuchElementException("There is no data to delete");
     }
-    else {
+    else {//temp is the node to be deleted
       Node temp = cursor.next;
       if (temp.next != null) {
         temp.next.prev = cursor;
@@ -118,25 +130,14 @@ public class MyText implements Text {
       cursor = cursor.next;
     }  }
 
-  /** Displays the current sequence of characters one one line, with the cursor underneath.
-   *
-   * Two lines should always be printed to System.out.
-   *
-   * For example, if the current characters are a, b, c, d, and the cursor is at the end,
-   * we should see:
-   *     abcd
-   *         ^
-   *
-   * With the same characters, but the cursor under the 'b', we would see:
-   *     abcd
-   *      ^
-   */
+  //Prints out the input text and cursor placement
   public void print() {
+    //Print out text
     for (Node temp = head; temp.next != null; temp = temp.next) {
       System.out.print(temp.next.data);
     }
     System.out.println();
-
+    //Print out spaces until cursor goes in
     for (Node temp = head; temp != cursor; temp = temp.next ) {
         System.out.print(" ");
     }

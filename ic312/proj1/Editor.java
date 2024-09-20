@@ -38,32 +38,28 @@ public class Editor {
     switch (line.charAt(0)) {
       case 'i':
         if (line.length() == 2){
-          Action act = new Action(line.charAt(0), 'x', txt);
-          stk.push(act);
+          store(line);
           txt.insert(line.charAt(1));
         }
         else {showError();}
         break;
       case 'd':
         if (txt.canMoveRight()){
-          Action act = new Action(line.charAt(0), txt.get(), txt);
-          stk.push(act);
+          store(line);
           txt.delete();
         }
         else showError();
         break;
       case '<':
         if (txt.canMoveLeft()) {
-          Action act = new Action(line.charAt(0), 'x', txt);
-          stk.push(act);
+          store(line);
           txt.moveLeft();
         }
         else showError();
         break;
       case '>':
         if (txt.canMoveRight()) {
-          Action act = new Action(line.charAt(0), 'x', txt);
-          stk.push(act);
+          store(line);
           txt.moveRight();
         }
         else showError();
@@ -73,19 +69,22 @@ public class Editor {
         break;
       case 'q':
         return false;
+      //Undo case: pop action off of stack and call undo
+      //undo: Runs commands to undo previous actions
       case 'u':
         try {
           Action a = stk.pop();
-          a.Decipher();
+          a.undo();
         } catch (Exception e) {
           showError();
         }
         break;
+      //Capacity case: Changes undo capacity
       case 'c':
         if (line.length() > 1) {
           String temp = line.substring(1);
           int num = 0;
-          try {
+          try {//In case user does not input numbers
             num = Integer.parseInt(temp);
           } catch (NumberFormatException e) {
             showError();
@@ -103,9 +102,18 @@ public class Editor {
     return true;
   }
 
-  private Text copy(Text t) {
-    Text temp = t;
-    return temp;
+  //Method to make processLine cleaner
+  //Sets action parameters to be able to undo
+  //what the user did
+  public void store(String line) {
+    Action act;
+    if (line.charAt(0) == 'd') {
+          act = new Action(line.charAt(0), txt.get(), txt);
+    }
+    else {
+      act = new Action(line.charAt(0), 'x', txt);
+    }
+    stk.push(act);
   }
 
   public static void main(String[] args) {
