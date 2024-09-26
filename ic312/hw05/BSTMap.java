@@ -102,6 +102,8 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
 
   }
 
+
+  // BAD BAD BAD
   private void put(Node cur, K key, V value) {
     // Key is in tree, replace its value
     if (cur.key == key) {
