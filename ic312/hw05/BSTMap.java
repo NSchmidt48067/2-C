@@ -108,18 +108,15 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
       cur.value = value;
       return;
     }
-    System.out.println(value);
     int temp = key.compareTo(cur.key);
 
     // Key is not in tree, create a new node
     if (cur.left == null && cur.right == null) {
       if (temp < 0) {
         cur.left = new Node(key, value, null, null);
-        //System.out.println("1");
       }
       else {
         cur.right = new Node(key, value, null, null);
-        //System.out.println(cur.value);
       }
       size++;
     }
@@ -177,9 +174,9 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
   public static void main(String[] args) {
     BSTMap<Integer, String> map = new BSTMap<Integer, String>();
     //  map.put(10, "bagel");
-    //  System.out.println(map.get(10));
+    //  //System.out.println(map.get(10));
     //  map.put(11, "muffin");
-    //  System.out.println(map.get(11));
+    //  //System.out.println(map.get(11));
     //  map.put(18, "toast");
     //  System.out.println(map.get(18));
     //  System.out.println(map.size());
