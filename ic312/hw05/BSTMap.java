@@ -108,16 +108,18 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
       cur.value = value;
       return;
     }
-    
+    System.out.println(value);
     int temp = key.compareTo(cur.key);
 
     // Key is not in tree, create a new node
     if (cur.left == null && cur.right == null) {
       if (temp < 0) {
         cur.left = new Node(key, value, null, null);
+        //System.out.println("1");
       }
       else {
         cur.right = new Node(key, value, null, null);
+        //System.out.println(cur.value);
       }
       size++;
     }
@@ -125,10 +127,10 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
     // If key is smaller, go left
     // Otherwise go right
     if (temp < 0) {
-      get(cur.left, key);
+      put(cur.left, key, value);
     }
     else if (temp > 0) {
-      get(cur.right, key);
+      put(cur.right, key, value);
     }
 
   }
@@ -147,6 +149,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
     }
     else {
       deque = new ArrayDeque<>(size);
+      traverse(root);
       return deque;
     }
   }
@@ -157,7 +160,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
     if (cur.left != null) {
       traverse(cur.left);
     }
-    deque.addLast(cur.key);
+    deque.add(cur.key);
     if (cur.right != null) {
       traverse(cur.right);
     }
@@ -173,9 +176,14 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
 
   public static void main(String[] args) {
     BSTMap<Integer, String> map = new BSTMap<Integer, String>();
-    // map.put(10, "cheese");
-    // System.out.println(map.get(10));
-    // map.put(11, "burger");
-    // System.out.println(map.get(11));
+    //  map.put(10, "bagel");
+    //  System.out.println(map.get(10));
+    //  map.put(11, "muffin");
+    //  System.out.println(map.get(11));
+    //  map.put(18, "toast");
+    //  System.out.println(map.get(18));
+    //  System.out.println(map.size());
+    //  Deque<Integer> deq = map.traverse();
+    //  System.out.println(deq.size());
   }
 }
