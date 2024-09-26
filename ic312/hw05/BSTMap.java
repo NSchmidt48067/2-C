@@ -3,7 +3,9 @@
 // Purpose: Use a BST to create a map
 // data structure
 
+import java.util.ArrayDeque;
 import java.util.Deque;
+import java.lang.Integer;
 
 public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
   //Node class for the BST
@@ -24,6 +26,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
   // root is the top of the tree
   private Node root = null;
   private int size = 0;
+  private Deque<K> deque = null;
 
   public BSTMap() {}
 
@@ -39,22 +42,23 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
 
   //Helper class for implementation
   public V get(Node cur, K key) {
-    // Found the key, return value
-    if (cur.key == key) {
-      return cur.value;
+    // Key does not exist in tree
+    if (cur == null) {
+      return null;
     }
 
-    // If there are children, 
-    // go to them looking for the key
-    if (cur.left != null) {
-      get(cur.left, key);
+    int temp = key.compareTo(cur.key);
+    // If key is smaller, go left
+    // Otherwise go right
+    if (temp < 0) {
+      return get(cur.left, key);
     }
-    if (cur.right != null) {
-      get(cur.right, key);
+    else if (temp > 0) {
+      return get(cur.right, key);
     }
-    
-    // Key was not found
-    return null;
+    else {
+      return cur.value;
+    }
   }
 
   @Override
@@ -67,47 +71,96 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
 
   //Helper class for implementation
   public boolean containsKey(Node cur, K key) {
-    // Found the key, return value
-    if (cur.key == key) {
-      return true;
+    // Key does not exist in tree
+    if (cur == null) {
+      return false;
     }
 
-    // If there are children, 
-    // go to them looking for the key
-    if (cur.left != null) {
-      get(cur.left, key);
+    int temp = key.compareTo(cur.key);
+    // If key is smaller, go left
+    // Otherwise go right
+    if (temp < 0) {
+      return containsKey(cur.left, key);
     }
-    if (cur.right != null) {
-      get(cur.right, key);
+    else if (temp > 0) {
+      return containsKey(cur.right, key);
     }
-    
-    // Key was not found
-    return false;
+    else {
+      return true;
+    }
   }
 
   @Override
   public void put(K key, V value) {
-    // requirement: O(size)
     if (root == null) {
       root = new Node(key, value, null, null);
+      size++;
     }
     else {
-
+      put(root, key, value);
     }
 
+  }
+
+  private void put(Node cur, K key, V value) {
+    // Key is in tree, replace its value
+    if (cur.key == key) {
+      cur.value = value;
+      return;
+    }
+    
+    int temp = key.compareTo(cur.key);
+
+    // Key is not in tree, create a new node
+    if (cur.left == null && cur.right == null) {
+      if (temp < 0) {
+        cur.left = new Node(key, value, null, null);
+      }
+      else {
+        cur.right = new Node(key, value, null, null);
+      }
+      size++;
+    }
+
+    // If key is smaller, go left
+    // Otherwise go right
+    if (temp < 0) {
+      get(cur.left, key);
+    }
+    else if (temp > 0) {
+      get(cur.right, key);
+    }
 
   }
 
-  @Override
+
+  // Return size
   public int size() {
-    // requirement: O(1)
-    throw new UnsupportedOperationException("you need to implement size()");
+    return size;
   }
 
-  @Override
+
+  // Use the class deque to make a new deque
   public Deque<K> traverse() {
-    // requirement: O(n)
-    throw new UnsupportedOperationException("you need to implement traverse()");
+    if (root == null) {
+      return null;
+    }
+    else {
+      deque = new ArrayDeque<>(size);
+      return deque;
+    }
+  }
+
+  // Use an in-order recursion to traverse
+  // the tree. 
+  private void traverse(Node cur) {
+    if (cur.left != null) {
+      traverse(cur.left);
+    }
+    deque.addLast(cur.key);
+    if (cur.right != null) {
+      traverse(cur.right);
+    }
   }
 
   @Override
@@ -119,7 +172,10 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
 
 
   public static void main(String[] args) {
-    BSTMap<String, Integer> map = new BSTMap<String, Integer>();
-
+    BSTMap<Integer, String> map = new BSTMap<Integer, String>();
+    // map.put(10, "cheese");
+    // System.out.println(map.get(10));
+    // map.put(11, "burger");
+    // System.out.println(map.get(11));
   }
 }
