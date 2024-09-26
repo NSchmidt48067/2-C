@@ -1,44 +1,101 @@
+// Author: Nate Schmidt
+// File: BSTMap.java
+// Purpose: Use a BST to create a map
+// data structure
+
 import java.util.Deque;
 
 public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
-  // private classes and fields here
+  //Node class for the BST
+  private class Node {
+    K key;
+    V value;
+    Node left;
+    Node right;
 
-private class Node {
-    T data;
-    Node next;
-
-    public Node(T data, Node next) {
-      this.data = data;
-      this.next = next;
+    public Node(K k, V v, Node l, Node r) {
+      key = k;
+      value = v;
+      left = l; 
+      right = r;
     }
   }
 
-  private Node head = null;
-  private Node tail = null;
+  // root is the top of the tree
+  private Node root = null;
   private int size = 0;
 
-  public LinkedList() {}
+  public BSTMap() {}
 
   @Override
   public V get(K key) {
-    // requirement: O(height)
-
-    if () {
-
+    //tree = empty
+    if (size == 0) {
+      return null;
     }
-    throw new UnsupportedOperationException("you need to implement get(k)");
+    //Find value from key
+    return get(root, key);
+  }
+
+  //Helper class for implementation
+  public V get(Node cur, K key) {
+    // Found the key, return value
+    if (cur.key == key) {
+      return cur.value;
+    }
+
+    // If there are children, 
+    // go to them looking for the key
+    if (cur.left != null) {
+      get(cur.left, key);
+    }
+    if (cur.right != null) {
+      get(cur.right, key);
+    }
+    
+    // Key was not found
+    return null;
   }
 
   @Override
   public boolean containsKey(K key) {
-    // requirement: O(height)
-    throw new UnsupportedOperationException("you need to implement containsKey(k)");
+    if (size == 0) {
+      return false;
+    }
+    return containsKey(root, key);
+  }
+
+  //Helper class for implementation
+  public boolean containsKey(Node cur, K key) {
+    // Found the key, return value
+    if (cur.key == key) {
+      return true;
+    }
+
+    // If there are children, 
+    // go to them looking for the key
+    if (cur.left != null) {
+      get(cur.left, key);
+    }
+    if (cur.right != null) {
+      get(cur.right, key);
+    }
+    
+    // Key was not found
+    return false;
   }
 
   @Override
   public void put(K key, V value) {
-    // requirement: O(height)
-    throw new UnsupportedOperationException("you need to implement put(k,v)");
+    // requirement: O(size)
+    if (root == null) {
+      root = new Node(key, value, null, null);
+    }
+    else {
+
+    }
+
+
   }
 
   @Override
@@ -55,7 +112,14 @@ private class Node {
 
   @Override
   public void remove(K key) {
-    // requirement: O(height)
+    // requirement: O(size)
     throw new UnsupportedOperationException("implement remove(k) last!");
+  }
+
+
+
+  public static void main(String[] args) {
+    BSTMap<String, Integer> map = new BSTMap<String, Integer>();
+
   }
 }
