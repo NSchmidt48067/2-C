@@ -167,10 +167,57 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
 
   @Override
   public void remove(K key) {
-    // requirement: O(size)
-    throw new UnsupportedOperationException("implement remove(k) last!");
+  remove(root, key);  
   }
 
+  private void remove(Node cur, K key) {
+    int temp = key.compareTo(cur.key);
+
+    // Key is in tree, DELETE IT
+    if (temp == 0) {
+      // Hard case, has two children
+      if (cur.left != null && cur.right != null) {
+        Node t = findSmall(cur.right);
+        remove(cur.right, key);
+        cur = t;
+      }
+      // Has left child
+      else if (cur.left != null) {
+        cur = cur.left;
+      }
+      // Has right child
+      else if (cur.right != null) {
+        cur = cur.right;
+      }
+      // No children
+      else {
+        cur = null;
+      }
+      return;
+    }
+
+    // If key is smaller, go left
+    // Otherwise go right
+    if (temp < 0) {
+      remove(cur.left, key);
+    }
+    else if (temp > 0) {
+      remove(cur.right, key);
+    }
+  }
+
+  // Finds smallest node in right subtree for remove()
+  // Node to right is passed in
+  private Node findSmall(Node cur) {
+    // If possible, go left      
+    if (cur.left != null) {
+      return findSmall(cur.left);
+    }
+    // Elbow node, remove right
+    else {
+      return cur;
+    }
+  }
 
 
   public static void main(String[] args) {
@@ -182,6 +229,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
      map.put(18, "toast");
      System.out.println(map.get(18));
      System.out.println(map.size());
+     map.remove(18);
      Deque<Integer> deq = map.traverse();
      System.out.println(deq.size());
   }
