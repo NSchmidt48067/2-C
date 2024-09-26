@@ -105,21 +105,21 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
 
   // BAD BAD BAD
   private void put(Node cur, K key, V value) {
+    int temp = key.compareTo(cur.key);
+
     // Key is in tree, replace its value
-    if (cur.key == key) {
+    if (temp == 0) {
       cur.value = value;
       return;
     }
-    int temp = key.compareTo(cur.key);
 
     // Key is not in tree, create a new node
-    if (cur.left == null && cur.right == null) {
-      if (temp < 0) {
-        cur.left = new Node(key, value, null, null);
-      }
-      else {
-        cur.right = new Node(key, value, null, null);
-      }
+    if (cur.left == null && temp < 0) {
+      cur.left = new Node(key, value, null, null);
+      size++;
+    }
+    else if (cur.right == null && temp > 0) {
+      cur.right = new Node(key, value, null, null);
       size++;
     }
 
@@ -175,14 +175,14 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
 
   public static void main(String[] args) {
     BSTMap<Integer, String> map = new BSTMap<Integer, String>();
-    //  map.put(10, "bagel");
-    //  //System.out.println(map.get(10));
-    //  map.put(11, "muffin");
-    //  //System.out.println(map.get(11));
-    //  map.put(18, "toast");
-    //  System.out.println(map.get(18));
-    //  System.out.println(map.size());
-    //  Deque<Integer> deq = map.traverse();
-    //  System.out.println(deq.size());
+     map.put(10, "bagel");
+     //System.out.println(map.get(10));
+     map.put(7, "muffin");
+     //System.out.println(map.get(11));
+     map.put(18, "toast");
+     System.out.println(map.get(18));
+     System.out.println(map.size());
+     Deque<Integer> deq = map.traverse();
+     System.out.println(deq.size());
   }
 }
