@@ -6,6 +6,7 @@
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.lang.Integer;
+import java.util.NoSuchElementException;
 
 public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
   //Node class for the BST
@@ -167,70 +168,72 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
 
   @Override
   public void remove(K key) {
-  remove(root, key);  
+    root = remove(root, key);
   }
 
-  private void remove(Node cur, K key) {
-    int temp = key.compareTo(cur.key);
-
-    // Key is in tree, DELETE IT
-    if (temp == 0) {
-      // Hard case, has two children
-      if (cur.left != null && cur.right != null) {
-        Node t = findSmall(cur.right);
-        remove(cur.right, key);
-        cur = t;
-      }
-      // Has left child
-      else if (cur.left != null) {
-        cur = cur.left;
-      }
-      // Has right child
-      else if (cur.right != null) {
-        cur = cur.right;
-      }
-      // No children
-      else {
-        cur = null;
-      }
-      return;
+  private Node remove(Node cur, K key) {
+    // Key is not in tree
+    if (cur == null) {
+      throw new NoSuchElementException("No key in the tree!");
     }
-
-    // If key is smaller, go left
-    // Otherwise go right
+    int temp = key.compareTo(cur.key);
+    
+    // Go left or right to find key
     if (temp < 0) {
-      remove(cur.left, key);
+      cur.left = remove(cur.left, key);
     }
     else if (temp > 0) {
-      remove(cur.right, key);
+      cur.right = remove(cur.right, key);
     }
+    // Key is in tree, DELETE IT
+    else {
+      // Does not have left child
+      if (cur.left == null) {
+        return cur.right;
+      }
+      // Does not have right child
+      else if (cur.right == null) {
+        return cur.left;
+      }
+      // Has two children
+      else {
+        Node t = findSmall(cur.right);
+        cur.key = t.key;
+        cur.value = t.value;
+        cur.right = remove(cur.right, t.key);
+      }
+      size--;
+    }
+    return cur;
   }
 
   // Finds smallest node in right subtree for remove()
   // Node to right is passed in
   private Node findSmall(Node cur) {
     // If possible, go left      
-    if (cur.left != null) {
-      return findSmall(cur.left);
+    if (cur.left == null) {
+      return cur;
+
     }
     // Elbow node, remove right
     else {
-      return cur;
+      return findSmall(cur.left);
     }
   }
 
 
   public static void main(String[] args) {
-    BSTMap<Integer, String> map = new BSTMap<Integer, String>();
-     map.put(10, "bagel");
-     //System.out.println(map.get(10));
-     map.put(7, "muffin");
-     //System.out.println(map.get(11));
-     map.put(18, "toast");
-     System.out.println(map.get(18));
-     System.out.println(map.size());
-     map.remove(18);
-     Deque<Integer> deq = map.traverse();
-     System.out.println(deq.size());
+    // BSTMap<Integer, String> map = new BSTMap<Integer, String>();
+    //  map.put(10, "bagel");
+    //  //System.out.println(map.get(10));
+    //  map.put(7, "muffin");
+    //  //System.out.println(map.get(11));
+    //  map.put(18, "toast");
+    //  System.out.println(map.get(18));
+    //  System.out.println(map.size());
+    //  map.remove(18);
+    //  System.out.println(map.get(18));
+    //  Deque<Integer> deq = map.traverse();
+    //  System.out.println(deq.size());
   }
 }
