@@ -203,8 +203,8 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
         cur.key = t.key;
         cur.value = t.value;
         cur.right = remove(cur.right, t.key);
+        size--;
       }
-      size--;
     }
     return cur;
   }
