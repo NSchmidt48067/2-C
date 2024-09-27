@@ -189,10 +189,12 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
     else {
       // Does not have left child
       if (cur.left == null) {
+        size--;
         return cur.right;
       }
       // Does not have right child
       else if (cur.right == null) {
+        size--;
         return cur.left;
       }
       // Has two children
