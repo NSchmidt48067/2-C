@@ -174,7 +174,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
   private Node remove(Node cur, K key) {
     // Key is not in tree
     if (cur == null) {
-      throw new NoSuchElementException("No key in the tree!");
+      return cur;
     }
     int temp = key.compareTo(cur.key);
     
