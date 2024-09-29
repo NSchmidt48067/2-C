@@ -177,7 +177,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
       return cur;
     }
     int temp = key.compareTo(cur.key);
-    
+
     // Go left or right to find key
     if (temp < 0) {
       cur.left = remove(cur.left, key);
@@ -203,7 +203,6 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
         cur.key = t.key;
         cur.value = t.value;
         cur.right = remove(cur.right, t.key);
-        size--;
       }
     }
     return cur;
@@ -225,17 +224,17 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K,V> {
 
 
   public static void main(String[] args) {
-    // BSTMap<Integer, String> map = new BSTMap<Integer, String>();
-    //  map.put(10, "bagel");
+    // BSTMap<String, Integer> map = new BSTMap<String, Integer>();
+    //  map.put("croissant", 100);
     //  //System.out.println(map.get(10));
-    //  map.put(7, "muffin");
+    //  map.put("pain chocolat", 50);
     //  //System.out.println(map.get(11));
-    //  map.put(18, "toast");
-    //  System.out.println(map.get(18));
+    //  map.put("gateau", 71);
+    //  map.put("profiterole", 200);
+    //  map.remove("pain chocolat");
+    //  map.remove("gateau");
+    //  map.remove("snickerdoodle");
     //  System.out.println(map.size());
-    //  map.remove(18);
-    //  System.out.println(map.get(18));
-    //  Deque<Integer> deq = map.traverse();
-    //  System.out.println(deq.size());
+
   }
 }
