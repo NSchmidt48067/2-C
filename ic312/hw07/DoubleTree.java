@@ -84,17 +84,45 @@ public class DoubleTree implements AddMax {
     }
     //Call update to change the height and balance
     cur.update();
+    // Do nothing if the node is balanced
     if (isBalanced(cur)) {
 
     }
+    // Rotations
     else {
       // Left leaning
       if (cur.balance < -1) {
-        
+        // Double rotation
+        if (cur.left != null && cur.left.balance == 1) {
+          // Left rotation on left child
+          if (cur.left.left != null) {
+            cur.left = leftRotate(cur.left);
+          }
+          // Right rotation on this node
+          cur = rightRotate(cur);
+        }
+        // Single rotation
+        else {
+          // Right Rotation
+          cur = rightRotate(cur);
+        }
       }
       // Right leaning
-      else {
-
+      else if (cur.balance > 1) {
+        // Double rotation
+        if (cur.right != null && cur.right.balance == -1) {
+          // Right rotation on right child
+          if (cur.right.right != null) {
+            cur.right = rightRotate(cur.right);
+          }
+          // Left rotation on this node
+          cur = leftRotate(cur);
+        }
+        // Single rotation
+        else {
+          // Left rotation
+          cur = leftRotate(cur);
+        }
       }
     }
   }
@@ -104,21 +132,48 @@ public class DoubleTree implements AddMax {
   }
 
   //Rotates the tree to the left
-  public Node leftRotate(Node cur) {
-    return null;
+  public Node leftRotate(Node oldRoot) {
+    Node newRoot = oldRoot.right; 
+    Node middle = newRoot.left;   
+    newRoot.left = oldRoot;
+    oldRoot.right = middle;
+    oldRoot.update();
+    newRoot.update();
+    return newRoot;
   }
   
   //Rotates the tree to the right
-  public Node rightRotate(Node cur) {
-    return null;
+  public Node rightRotate(Node oldRoot) {
+    Node newRoot = oldRoot.left; 
+    Node middle = newRoot.right;   
+    newRoot.right = oldRoot;    
+    oldRoot.left = middle;
+    oldRoot.update();
+    newRoot.update();
+    return newRoot;
   }
 
   //RemoveMax implementation
   public double removeMax() throws NoSuchElementException{
-    return 2.1;
+    if (root == null) {
+      throw new NoSuchElementException("The tree is empty");
+    }
+    else {
+      Node temp = removeMax(root);
+      root = temp.left;
+      return temp.data;
+    }
   }
 
-  public double removeMax(Node cur) {
-    return 2.1;
+  public Node removeMax(Node cur) {
+    // Found largest Number
+    if (cur.right == null) {
+      return cur;
+    }
+    cur.right = removeMax(cur.right);
+
+    cur.update();
+
+    return cur;
   }
 }
