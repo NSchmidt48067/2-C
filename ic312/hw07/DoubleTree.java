@@ -30,9 +30,10 @@ public class DoubleTree implements AddMax {
       balance = (left != null ? left.height: -1) - (right != null ? right.height: -1);
       if (left == null && right == null) {
         height = 0;
-      }
+      } 
       else {
-        height = Math.max((left != null ? left.height: -1) - (right != null ? right.height: -1)) + 1;
+        height = Math.max((left != null ? left.height: -1),
+          (right != null ? right.height: -1)) + 1;
       }
     }
   }
@@ -57,10 +58,6 @@ public class DoubleTree implements AddMax {
   }
 
   public void add(double x, Node cur) {
-    // Base case
-    if (cur == null) {
-      return;
-    }
     int temp = Double.compare(x, cur.data);
 
     // Number is in tree, do nothing
@@ -85,6 +82,25 @@ public class DoubleTree implements AddMax {
     else if (temp > 0) {
       add(x, cur.right);
     }
+    //Call update to change the height and balance
+    cur.update();
+    if (isBalanced(cur)) {
+
+    }
+    else {
+      // Left leaning
+      if (cur.balance < -1) {
+        
+      }
+      // Right leaning
+      else {
+
+      }
+    }
+  }
+
+  public boolean isBalanced(Node cur) {
+    return (cur.balance <= 1 && cur.balance >= -1);
   }
 
   //Rotates the tree to the left
