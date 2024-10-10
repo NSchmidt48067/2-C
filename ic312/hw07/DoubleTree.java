@@ -1,18 +1,9 @@
 import java.util.NoSuchElementException;
 
-/* Nathaniel Schmidt
- * This is the place to write any sources you used etc.
- */
+// Nathaniel Schmidt
+// Talked to George Prielipp about this
+
 public class DoubleTree implements AddMax {
-  // Thought
-  // Track left height and right height and parent node
-  // In order traversal down to find duplicate
-  // if not found, add node and then change heights
-  // and check node balance. Rotate as necessary
-  // Could work
-
-
-  
  //Node class for the BST
   private class Node {
     int height = 0;
@@ -26,6 +17,7 @@ public class DoubleTree implements AddMax {
       left = l; 
       right = r;
     }
+
     public void update() {
       balance = (right != null ? right.height: -1) - (left != null ? left.height: -1);
       if (left == null && right == null) {
@@ -43,9 +35,7 @@ public class DoubleTree implements AddMax {
 
   //Class variables
   private Node root = null;
-
-
-
+  private double value = 0;
 
   //Add implementation
   public void add(double x) {
@@ -57,14 +47,13 @@ public class DoubleTree implements AddMax {
     }
   }
 
+  // Adds number if it is not in the list already
   public Node add(double x, Node cur) {
     // Value is not in the tree, add it
     if (cur == null) {
       return new Node(x, null, null);
     }
-
     int temp = Double.compare(x, cur.data);
-
     // Number is in tree, do nothing
     if (temp == 0) {
       return cur;
@@ -81,15 +70,12 @@ public class DoubleTree implements AddMax {
     cur.update();
     // If rotations are necessary, perform them
     cur =  Rebalance(cur);
-
     return cur;
 
   }
 
+  // Checks if the node needs to be rebalanced
   public Node Rebalance(Node cur) {
-        //System.out.println(root.left.data);
-
-    
     // Left leaning
     if (cur.balance < -1) {
       // Double rotation
@@ -103,7 +89,7 @@ public class DoubleTree implements AddMax {
     else if (cur.balance > 1) {
       // Double rotation
       if (cur.right != null && cur.right.balance == -1) {
-        // Right rotation on right child
+          // Right rotation on right child
           cur.right = rightRotate(cur.right);
         }
         // Left rotation
@@ -123,12 +109,11 @@ public class DoubleTree implements AddMax {
     Node middle = (newRoot == null ? null: newRoot.left);   
     newRoot.left = oldRoot;
     oldRoot.right = middle;
+    // Update everything
     oldRoot.update();
     newRoot.update();
-
     if (newRoot.left != null) newRoot.left.update();
     if (newRoot.right != null) newRoot.right.update();
-
     return newRoot;
   }
   
@@ -138,13 +123,11 @@ public class DoubleTree implements AddMax {
     Node middle = (newRoot == null ? null : newRoot.right);   
     newRoot.right = oldRoot;    
     oldRoot.left = middle;
+    // Update everything
     oldRoot.update();
     newRoot.update();
-
     if (newRoot.left != null) newRoot.left.update();
     if (newRoot.right != null) newRoot.right.update();
-
-
     return newRoot;
   }
 
@@ -153,56 +136,41 @@ public class DoubleTree implements AddMax {
     if (root == null) {
       throw new NoSuchElementException("The tree is empty");
     }
+    // Removal looks 2 nodes ahead
+    // Thus, this checks that there is at least
+    // One node to the right
+    else if (root.right == null) {
+      value = root.data;
+      root = root.left;
+      if (root != null) {
+        root.update();
+        root = Rebalance(root);
+      }
+      return value;
+    }
     else {
-      Node [] temp = new Node[1];
-      root = removeMax(root, temp);
-      return temp[0].data;
+      root = removeMax(root);
+      return value;
     }
   }
 
-  public Node removeMax(Node cur, Node[] temp) {
+  public Node removeMax(Node cur) {
     // Found largest Number
-    if (cur.right == null) {
-      temp[0] = cur;
+    if (cur.right.right == null) {
+      value = cur.right.data;
+      Node temp = cur.right.left; // Handles possility of elbow node
+      cur.right = temp;
+      cur.update();
+      cur = Rebalance(cur);
       return cur;
     }
-    cur.right = removeMax(cur.right, temp);
-
+    cur.right = removeMax(cur.right);
     cur.update();
-
     return cur;
   }
 
-    public Double get(Double x) {
-    //Find value from key
-    return get(root, x);
-  }
-
-    //Helper class for implementation
-  public Double get(Node cur, Double x) {
-    // Key does not exist in tree
-    if (cur == null) {
-      return null;
-    }
-    int temp = Double.compare(x, cur.data);
-
-    // Number is in tree, do nothing
-    if (temp == 0) {
-      return cur.data;
-    }
-    // If key is smaller, go left
-    // Otherwise go right
-    if (temp < 0) {
-      return get(cur.left, x);
-    }
-    else if (temp > 0) {
-      return get(cur.right, x);
-    }
-    else {
-      return cur.data;
-    }
-  }
-
+  // Helper mmethod that prints out 
+  // the tree in a preorder traversal
   public void printAll(Node cur) {
     if (cur == null) {
       return;
@@ -220,17 +188,24 @@ public class DoubleTree implements AddMax {
     printAll(root);
   }
 
-    public static void main(String[] args) {
-    DoubleTree tree = new DoubleTree();
-    tree.add(10.0);
-    tree.add(11.0);
-    tree.add(12.0);
-    tree.add(9.0);
-    tree.add(10.5);
-    tree.add(12.1);
-    tree.add(12.05);
-    tree.printer();
-    //System.out.println(tree.get(12.0));
+  //   public static void main(String[] args) {
+  //   DoubleTree tree = new DoubleTree();
+  //   tree.add(10.0);
+  //   tree.add(11.0);
+  //   tree.add(12.0);
+  //   tree.add(9.0);
+  //   tree.add(10.5);
+  //   tree.add(12.5);
+  //   tree.add(12.1);
+  //   tree.add(900);
+  //   tree.add(1000);
+  //       System.out.println();
+  //   System.out.println(tree.removeMax());
+  //   System.out.println();
+  //   tree.add(13);
 
-  }
+  //   tree.printer();
+  //   //System.out.println(tree.get(12.0));
+
+  // }
 }
